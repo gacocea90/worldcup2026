@@ -153,6 +153,7 @@ function MatchCard({ match }: { match: Match }) {
 export default function MatchesSection() {
   const [groupFilter, setGroupFilter] = useState('all');
   const [view, setView] = useState<'all' | 'today' | 'finished' | 'upcoming'>('all');
+  const [teamQuery, setTeamQuery] = useState('');
 
   // Each match tagged with its Romania-local date key and kickoff instant.
   const dated = useMemo(
@@ -170,12 +171,19 @@ export default function MatchesSection() {
     () =>
       dated.filter(({ m, dateKey }) => {
         if (groupFilter !== 'all' && m.group !== groupFilter) return false;
+        const q = teamQuery.trim().toLowerCase();
+        if (q) {
+          const home = teamById(m.home);
+          const away = teamById(m.away);
+          const hit = [home.name, away.name, home.id, away.id].some((s) => s.toLowerCase().includes(q));
+          if (!hit) return false;
+        }
         if (view === 'today') return dateKey === TODAY;
         if (view === 'finished') return m.status === 'finished';
         if (view === 'upcoming') return m.status === 'upcoming' && dateKey >= TODAY;
         return true;
       }),
-    [dated, groupFilter, view],
+    [dated, groupFilter, view, teamQuery],
   );
 
   const byDate = useMemo(() => {
@@ -214,6 +222,13 @@ export default function MatchesSection() {
             </option>
           ))}
         </select>
+        <input
+          type="search"
+          value={teamQuery}
+          onChange={(e) => setTeamQuery(e.target.value)}
+          placeholder="Search team…"
+          className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:border-emerald-500 focus:outline-none"
+        />
         <span className="ml-auto text-xs text-slate-500">🇷🇴 Times in Romania (EEST)</span>
       </div>
 
