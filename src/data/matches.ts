@@ -1,5 +1,20 @@
 export type MatchStatus = 'finished' | 'upcoming';
 
+export interface MatchEvent {
+  minute: string; // e.g. "9'", "90+2'"
+  type: 'goal' | 'yellow' | 'red';
+  side: 'home' | 'away';
+  player: string;
+  note?: string; // e.g. assist
+}
+
+export interface StatRow {
+  label: string;
+  home: number;
+  away: number;
+  unit?: string; // e.g. "%"
+}
+
 export interface Match {
   id: number;
   date: string; // ISO date (local venue date)
@@ -12,14 +27,49 @@ export interface Match {
   status: MatchStatus;
   homeScore?: number;
   awayScore?: number;
+  events?: MatchEvent[]; // chronological timeline for finished matches
+  stats?: StatRow[]; // Flashscore-style stat comparison for finished matches
 }
 
 // Group stage — all 72 matches, June 11–27, 2026.
 // To record a result: set status to 'finished' and fill homeScore/awayScore.
 export const matches: Match[] = [
   // Matchday 1 — Thursday, June 11
-  { id: 1, date: '2026-06-11', time: '13:00 CST', group: 'A', home: 'MEX', away: 'RSA', venue: 'Estadio Azteca', city: 'Mexico City', status: 'finished', homeScore: 2, awayScore: 0 },
-  { id: 2, date: '2026-06-11', time: '20:00 CST', group: 'A', home: 'KOR', away: 'CZE', venue: 'Estadio Akron', city: 'Guadalajara', status: 'finished', homeScore: 2, awayScore: 1 },
+  {
+    id: 1, date: '2026-06-11', time: '13:00 CST', group: 'A', home: 'MEX', away: 'RSA', venue: 'Estadio Azteca', city: 'Mexico City', status: 'finished', homeScore: 2, awayScore: 0,
+    events: [
+      { minute: "9'", type: 'goal', side: 'home', player: 'Julián Quiñones', note: 'assist: Erik Lira' },
+      { minute: "17'", type: 'yellow', side: 'away', player: 'Teboho Mokoena' },
+      { minute: "23'", type: 'yellow', side: 'home', player: 'Brian Gutiérrez' },
+      { minute: "50'", type: 'red', side: 'away', player: 'Sphephelo Sithole', note: 'serious foul play' },
+      { minute: "67'", type: 'goal', side: 'home', player: 'Raúl Jiménez', note: 'assist: Roberto Alvarado' },
+      { minute: "74'", type: 'yellow', side: 'away', player: 'Nkosinathi Sibisi' },
+      { minute: "84'", type: 'red', side: 'away', player: 'Themba Zwane', note: 'unsporting behavior' },
+      { minute: "90+2'", type: 'red', side: 'home', player: 'César Montes', note: 'serious foul play' },
+    ],
+    stats: [
+      { label: 'Expected goals (xG)', home: 1.41, away: 0.07 },
+      { label: 'Total shots', home: 16, away: 3 },
+      { label: 'Touches in opposition box', home: 20, away: 2 },
+      { label: 'Yellow cards', home: 1, away: 2 },
+      { label: 'Red cards', home: 1, away: 2 },
+    ],
+  },
+  {
+    id: 2, date: '2026-06-11', time: '20:00 CST', group: 'A', home: 'KOR', away: 'CZE', venue: 'Estadio Akron', city: 'Guadalajara', status: 'finished', homeScore: 2, awayScore: 1,
+    events: [
+      { minute: "59'", type: 'goal', side: 'away', player: 'Ladislav Krejčí', note: 'assist: Vladimír Coufal' },
+      { minute: "67'", type: 'goal', side: 'home', player: 'Hwang In-beom', note: 'assist: Lee Kang-in' },
+      { minute: "80'", type: 'goal', side: 'home', player: 'Oh Hyeon-gyu', note: 'assist: Hwang In-beom' },
+      { minute: "90+6'", type: 'yellow', side: 'home', player: 'Lee Gi-hyuk' },
+    ],
+    stats: [
+      { label: 'Ball possession', home: 61.7, away: 38.3, unit: '%' },
+      { label: 'Expected goals (xG)', home: 1.84, away: 0.81 },
+      { label: 'Yellow cards', home: 1, away: 0 },
+      { label: 'Red cards', home: 0, away: 0 },
+    ],
+  },
   // Friday, June 12
   { id: 3, date: '2026-06-12', time: '15:00 ET', group: 'B', home: 'CAN', away: 'BIH', venue: 'BMO Field', city: 'Toronto', status: 'upcoming' },
   { id: 4, date: '2026-06-12', time: '18:00 PT', group: 'D', home: 'USA', away: 'PAR', venue: 'SoFi Stadium', city: 'Los Angeles', status: 'upcoming' },
