@@ -71,7 +71,23 @@ export const matches: Match[] = [
     ],
   },
   // Friday, June 12
-  { id: 3, date: '2026-06-12', time: '15:00 ET', group: 'B', home: 'CAN', away: 'BIH', venue: 'BMO Field', city: 'Toronto', status: 'upcoming' },
+  {
+    id: 3, date: '2026-06-12', time: '15:00 ET', group: 'B', home: 'CAN', away: 'BIH', venue: 'BMO Field', city: 'Toronto', status: 'finished', homeScore: 1, awayScore: 1,
+    events: [
+      { minute: "11'", type: 'yellow', side: 'home', player: 'Alistair Johnston' },
+      { minute: "21'", type: 'goal', side: 'away', player: 'Jovo Lukić' },
+      { minute: "44'", type: 'yellow', side: 'away', player: 'Ermedin Demirović' },
+      { minute: "45+1'", type: 'yellow', side: 'away', player: 'Jovo Lukić' },
+      { minute: "53'", type: 'yellow', side: 'home', player: 'Luc de Fougerolles' },
+      { minute: "78'", type: 'goal', side: 'home', player: 'Cyle Larin' },
+      { minute: "90+3'", type: 'yellow', side: 'away', player: 'Nikola Katić' },
+    ],
+    stats: [
+      { label: 'Expected goals (xG)', home: 1.25, away: 0.98 },
+      { label: 'Shots on target', home: 4, away: 8 },
+      { label: 'Yellow cards', home: 2, away: 3 },
+    ],
+  },
   { id: 4, date: '2026-06-12', time: '18:00 PT', group: 'D', home: 'USA', away: 'PAR', venue: 'SoFi Stadium', city: 'Los Angeles', status: 'upcoming' },
   // Saturday, June 13
   { id: 5, date: '2026-06-13', time: '12:00 PT', group: 'B', home: 'QAT', away: 'SUI', venue: "Levi's Stadium", city: 'San Francisco Bay Area', status: 'upcoming' },
