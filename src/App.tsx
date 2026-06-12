@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import BracketSection from './components/BracketSection';
+import LiveNow from './components/LiveNow';
 import MatchesSection from './components/MatchesSection';
 import ScorersSection from './components/ScorersSection';
 import TeamsSection from './components/TeamsSection';
@@ -48,6 +49,7 @@ export default function App() {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-8">
+        <LiveNow />
         {tab === 'matches' && <MatchesSection />}
         {tab === 'teams' && <TeamsSection />}
         {tab === 'scorers' && <ScorersSection />}
