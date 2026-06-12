@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import BracketSection from './components/BracketSection';
 import MatchesSection from './components/MatchesSection';
 import ScorersSection from './components/ScorersSection';
 import TeamsSection from './components/TeamsSection';
 
-type Tab = 'matches' | 'teams' | 'scorers';
+type Tab = 'matches' | 'teams' | 'scorers' | 'bracket';
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('matches');
@@ -28,6 +29,7 @@ export default function App() {
               ['matches', 'Matches'],
               ['teams', 'Teams & Players'],
               ['scorers', 'Top Scorers'],
+              ['bracket', 'Bracket'],
             ] as [Tab, string][]
           ).map(([id, label]) => (
             <button
@@ -49,6 +51,7 @@ export default function App() {
         {tab === 'matches' && <MatchesSection />}
         {tab === 'teams' && <TeamsSection />}
         {tab === 'scorers' && <ScorersSection />}
+        {tab === 'bracket' && <BracketSection />}
       </main>
 
       <footer className="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
