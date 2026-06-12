@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { knockoutRounds, matches, type Match, type MatchEvent } from '../data/matches';
 import { groups, teamById } from '../data/teams';
+import { kickoffUtc, localDateKey, localTime, todayKey } from '../utils/time';
 import Flag from './Flag';
 
 const EVENT_ICONS: Record<MatchEvent['type'], string> = {
@@ -86,13 +87,15 @@ function MatchDetails({ match }: { match: Match }) {
   );
 }
 
-const TODAY = new Date().toISOString().slice(0, 10);
+const TODAY = todayKey();
 
-function formatDate(iso: string): string {
-  return new Date(`${iso}T12:00:00`).toLocaleDateString('en-US', {
+// Format a Romania-local date key (YYYY-MM-DD) as a readable heading.
+function formatDate(key: string): string {
+  return new Date(`${key}T12:00:00Z`).toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
+    timeZone: 'UTC',
   });
 }
 
@@ -124,7 +127,7 @@ function MatchCard({ match }: { match: Match }) {
               {match.homeScore} – {match.awayScore}
             </span>
           ) : (
-            <span className="text-sm font-semibold text-slate-400">{match.time}</span>
+            <span className="text-sm font-semibold text-slate-400">{localTime(kickoffUtc(match))}</span>
           )}
         </div>
         <div className="flex flex-1 items-center gap-2">
@@ -151,22 +154,34 @@ export default function MatchesSection() {
   const [groupFilter, setGroupFilter] = useState('all');
   const [view, setView] = useState<'all' | 'today' | 'finished' | 'upcoming'>('all');
 
+  // Each match tagged with its Romania-local date key and kickoff instant.
+  const dated = useMemo(
+    () =>
+      matches
+        .map((m) => {
+          const kickoff = kickoffUtc(m);
+          return { m, kickoff, dateKey: localDateKey(kickoff) };
+        })
+        .sort((a, b) => a.kickoff.getTime() - b.kickoff.getTime()),
+    [],
+  );
+
   const filtered = useMemo(
     () =>
-      matches.filter((m) => {
+      dated.filter(({ m, dateKey }) => {
         if (groupFilter !== 'all' && m.group !== groupFilter) return false;
-        if (view === 'today') return m.date === TODAY;
+        if (view === 'today') return dateKey === TODAY;
         if (view === 'finished') return m.status === 'finished';
-        if (view === 'upcoming') return m.status === 'upcoming' && m.date >= TODAY;
+        if (view === 'upcoming') return m.status === 'upcoming' && dateKey >= TODAY;
         return true;
       }),
-    [groupFilter, view],
+    [dated, groupFilter, view],
   );
 
   const byDate = useMemo(() => {
     const map = new Map<string, Match[]>();
-    for (const m of filtered) {
-      (map.get(m.date) ?? map.set(m.date, []).get(m.date)!).push(m);
+    for (const { m, dateKey } of filtered) {
+      (map.get(dateKey) ?? map.set(dateKey, []).get(dateKey)!).push(m);
     }
     return [...map.entries()];
   }, [filtered]);
@@ -199,6 +214,7 @@ export default function MatchesSection() {
             </option>
           ))}
         </select>
+        <span className="ml-auto text-xs text-slate-500">🇷🇴 Times in Romania (EEST)</span>
       </div>
 
       {byDate.length === 0 && (
