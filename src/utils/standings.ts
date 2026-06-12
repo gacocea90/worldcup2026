@@ -1,4 +1,4 @@
-import { matches } from '../data/matches';
+import { matches as staticMatches, type Match } from '../data/matches';
 import { teams, type Team } from '../data/teams';
 
 export interface StandingRow {
@@ -12,7 +12,7 @@ export interface StandingRow {
   points: number;
 }
 
-export function groupStandings(group: string): StandingRow[] {
+export function groupStandings(group: string, matches: Match[] = staticMatches): StandingRow[] {
   const rows = new Map<string, StandingRow>();
   for (const team of teams.filter((t) => t.group === group)) {
     rows.set(team.id, { team, played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 });

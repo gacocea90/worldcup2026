@@ -1,19 +1,24 @@
-import { liveStatusLabel, useLiveMatches, type LiveMatch } from '../hooks/useLiveMatches';
+import { useLiveData, type Overlay } from '../context/LiveData';
 import { teams } from '../data/teams';
 import Flag from './Flag';
 
-function TeamSide({ teamId, name, align }: { teamId?: string; name: string; align: 'left' | 'right' }) {
+interface LiveEntry extends Overlay {
+  homeId: string;
+  awayId: string;
+}
+
+function TeamSide({ teamId, align }: { teamId: string; align: 'left' | 'right' }) {
   const team = teams.find((t) => t.id === teamId);
   return (
     <div className={`flex flex-1 items-center gap-2 ${align === 'left' ? 'justify-end text-right' : ''}`}>
       {align === 'right' && team && <Flag team={team} className="w-7" />}
-      <span className="font-semibold">{team?.name ?? name}</span>
+      <span className="font-semibold">{team?.name ?? teamId}</span>
       {align === 'left' && team && <Flag team={team} className="w-7" />}
     </div>
   );
 }
 
-function LiveCard({ match }: { match: LiveMatch }) {
+function LiveCard({ match }: { match: LiveEntry }) {
   return (
     <div className="rounded-xl border border-red-500/40 bg-red-950/20 px-4 py-3">
       <div className="flex items-center gap-3">
@@ -22,13 +27,13 @@ function LiveCard({ match }: { match: LiveMatch }) {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
           </span>
-          {liveStatusLabel(match)}
+          {match.matchTime || 'LIVE'}
         </span>
-        <TeamSide teamId={match.homeId} name={match.homeName} align="left" />
+        <TeamSide teamId={match.homeId} align="left" />
         <span className="shrink-0 rounded-lg bg-red-500/15 px-3 py-1 text-lg font-bold text-red-300">
-          {match.homeScore} – {match.awayScore}
+          {match.homeScore ?? 0} – {match.awayScore ?? 0}
         </span>
-        <TeamSide teamId={match.awayId} name={match.awayName} align="right" />
+        <TeamSide teamId={match.awayId} align="right" />
         <span className="w-20 shrink-0" />
       </div>
       {match.goals.length > 0 && (
@@ -51,8 +56,15 @@ function LiveCard({ match }: { match: LiveMatch }) {
 }
 
 export default function LiveNow() {
-  const { matches, updatedAt } = useLiveMatches();
-  if (matches.length === 0) return null;
+  const { overlay, updatedAt } = useLiveData();
+  const live: LiveEntry[] = [...overlay.entries()]
+    .filter(([, o]) => o.status === 'live')
+    .map(([key, o]) => {
+      const [homeId, awayId] = key.split('-');
+      return { ...o, homeId, awayId };
+    });
+
+  if (live.length === 0) return null;
   return (
     <div className="mb-8 space-y-2">
       <div className="flex items-baseline justify-between">
@@ -63,8 +75,8 @@ export default function LiveNow() {
           </span>
         )}
       </div>
-      {matches.map((m) => (
-        <LiveCard key={m.id} match={m} />
+      {live.map((m) => (
+        <LiveCard key={`${m.homeId}-${m.awayId}`} match={m} />
       ))}
     </div>
   );

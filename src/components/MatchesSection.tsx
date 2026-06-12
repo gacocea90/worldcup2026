@@ -2,7 +2,10 @@ import { useMemo, useState } from 'react';
 import { knockoutRounds, matches, type Match, type MatchEvent } from '../data/matches';
 import { groups, teamById } from '../data/teams';
 import { kickoffUtc, localDateKey, localTime, todayKey } from '../utils/time';
+import { applyOverlay, useLiveData } from '../context/LiveData';
 import Flag from './Flag';
+
+type LiveMatch = Match & { live?: boolean; matchTime?: string };
 
 const EVENT_ICONS: Record<MatchEvent['type'], string> = {
   goal: '⚽',
@@ -99,10 +102,11 @@ function formatDate(key: string): string {
   });
 }
 
-function MatchCard({ match }: { match: Match }) {
+function MatchCard({ match }: { match: LiveMatch }) {
   const [expanded, setExpanded] = useState(false);
   const home = teamById(match.home);
   const away = teamById(match.away);
+  const live = Boolean(match.live);
   const finished = match.status === 'finished';
   const hasDetails = finished && Boolean(match.events?.length || match.stats?.length);
   return (
@@ -123,11 +127,24 @@ function MatchCard({ match }: { match: Match }) {
         </div>
         <div className="w-20 shrink-0 text-center">
           {finished ? (
-            <span className="rounded-lg bg-emerald-500/15 px-3 py-1 text-lg font-bold text-emerald-400">
+            <span
+              className={`rounded-lg px-3 py-1 text-lg font-bold ${
+                live ? 'bg-red-500/15 text-red-300' : 'bg-emerald-500/15 text-emerald-400'
+              }`}
+            >
               {match.homeScore} – {match.awayScore}
             </span>
           ) : (
             <span className="text-sm font-semibold text-slate-400">{localTime(kickoffUtc(match))}</span>
+          )}
+          {live && (
+            <span className="mt-1 flex items-center justify-center gap-1 text-[10px] font-bold text-red-400">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
+              </span>
+              {match.matchTime || 'LIVE'}
+            </span>
           )}
         </div>
         <div className="flex flex-1 items-center gap-2">
@@ -155,16 +172,20 @@ export default function MatchesSection() {
   const [view, setView] = useState<'all' | 'today' | 'finished' | 'upcoming'>('all');
   const [teamQuery, setTeamQuery] = useState('');
 
-  // Each match tagged with its Romania-local date key and kickoff instant.
+  const { overlay } = useLiveData();
+
+  // Each match tagged with its Romania-local date key and kickoff instant,
+  // with live/finished scores from the FIFA feed applied on top.
   const dated = useMemo(
     () =>
       matches
         .map((m) => {
-          const kickoff = kickoffUtc(m);
-          return { m, kickoff, dateKey: localDateKey(kickoff) };
+          const merged = applyOverlay(m, overlay);
+          const kickoff = kickoffUtc(merged);
+          return { m: merged, kickoff, dateKey: localDateKey(kickoff) };
         })
         .sort((a, b) => a.kickoff.getTime() - b.kickoff.getTime()),
-    [],
+    [overlay],
   );
 
   const filtered = useMemo(

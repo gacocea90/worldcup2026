@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { scorers } from '../data/scorers';
 import { teamById } from '../data/teams';
+import { useLiveData } from '../context/LiveData';
 import Flag from './Flag';
 
 function PlayerAvatar({ name, photo }: { name: string; photo?: string }) {
@@ -28,6 +28,7 @@ function PlayerAvatar({ name, photo }: { name: string; photo?: string }) {
 }
 
 export default function ScorersSection() {
+  const { scorers, updatedAt } = useLiveData();
   const ranked = useMemo(() => {
     const sorted = [...scorers].sort(
       (a, b) => b.goals - a.goals || a.player.localeCompare(b.player),
@@ -41,7 +42,7 @@ export default function ScorersSection() {
       }
       return { ...s, rank };
     });
-  }, []);
+  }, [scorers]);
 
   return (
     <section>
@@ -101,8 +102,8 @@ export default function ScorersSection() {
       </div>
 
       <p className="mt-4 text-xs text-slate-500">
-        Scorers are recorded in <code className="rounded bg-slate-800 px-1.5 py-0.5">src/data/scorers.ts</code> —
-        the ranking updates automatically.
+        Updated live from the official FIFA feed{updatedAt && ` · ${updatedAt.toLocaleTimeString()}`}. New scorers
+        appear automatically; curated photos are shown when available.
       </p>
     </section>
   );

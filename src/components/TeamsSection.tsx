@@ -1,10 +1,13 @@
 import { useMemo, useState } from 'react';
 import { groups, teams } from '../data/teams';
 import { groupStandings } from '../utils/standings';
+import { finishedMerged, useLiveData } from '../context/LiveData';
 import Flag from './Flag';
 
 export default function TeamsSection() {
   const [search, setSearch] = useState('');
+  const { overlay } = useLiveData();
+  const mergedMatches = useMemo(() => finishedMerged(overlay), [overlay]);
 
   const visibleGroups = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -34,7 +37,7 @@ export default function TeamsSection() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {visibleGroups.map((g) => {
-          const standings = groupStandings(g);
+          const standings = groupStandings(g, mergedMatches);
           return (
             <div key={g} className="rounded-2xl border border-slate-700/60 bg-slate-800/40 p-5">
               <h3 className="mb-4 text-xl font-bold">

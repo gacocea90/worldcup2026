@@ -4,6 +4,7 @@ import LiveNow from './components/LiveNow';
 import MatchesSection from './components/MatchesSection';
 import ScorersSection from './components/ScorersSection';
 import TeamsSection from './components/TeamsSection';
+import { LiveDataProvider } from './context/LiveData';
 
 type Tab = 'matches' | 'teams' | 'scorers' | 'bracket';
 
@@ -11,6 +12,7 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('matches');
 
   return (
+    <LiveDataProvider>
     <div className="min-h-screen bg-slate-900 text-slate-100">
       <header className="border-b border-slate-800 bg-gradient-to-r from-emerald-950 via-slate-900 to-sky-950">
         <div className="mx-auto max-w-5xl px-4 py-8">
@@ -57,8 +59,9 @@ export default function App() {
       </main>
 
       <footer className="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
-        FIFA World Cup 2026 — group standings update automatically from recorded results.
+        FIFA World Cup 2026 — scores, standings & scorers update live from the official FIFA feed.
       </footer>
     </div>
+    </LiveDataProvider>
   );
 }
