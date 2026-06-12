@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { groups, teams } from '../data/teams';
 import { groupStandings } from '../utils/standings';
+import Flag from './Flag';
 
 export default function TeamsSection() {
   const [search, setSearch] = useState('');
@@ -56,8 +57,10 @@ export default function TeamsSection() {
                   {standings.map((row, i) => (
                     <tr key={row.team.id} className={`border-t border-slate-700/50 ${i < 2 ? 'text-slate-100' : 'text-slate-400'}`}>
                       <td className="py-1.5">
-                        <span className="mr-2">{row.team.flag}</span>
-                        {row.team.name}
+                        <span className="flex items-center gap-2">
+                          <Flag team={row.team} className="w-5" />
+                          {row.team.name}
+                        </span>
                       </td>
                       <td className="text-center">{row.played}</td>
                       <td className="text-center">{row.won}</td>
@@ -82,7 +85,7 @@ export default function TeamsSection() {
                   .map((t) => (
                     <div key={t.id} className="rounded-xl bg-slate-800/80 p-3">
                       <div className="mb-1 flex items-center gap-2">
-                        <span className="text-xl">{t.flag}</span>
+                        <Flag team={t} className="w-6" />
                         <span className="font-semibold">{t.name}</span>
                         <span className="ml-auto rounded bg-slate-700 px-1.5 py-0.5 text-[10px] font-semibold text-slate-300">
                           {t.confederation}

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { knockoutRounds, matches, type Match, type MatchEvent } from '../data/matches';
 import { groups, teamById } from '../data/teams';
+import Flag from './Flag';
 
 const EVENT_ICONS: Record<MatchEvent['type'], string> = {
   goal: '⚽',
@@ -64,9 +65,9 @@ function MatchDetails({ match }: { match: Match }) {
       {match.events && match.events.length > 0 && (
         <div>
           <div className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <span>{home.flag} {home.name}</span>
+            <span className="flex items-center gap-1.5"><Flag team={home} className="w-5" /> {home.name}</span>
             <span>Timeline</span>
-            <span>{away.name} {away.flag}</span>
+            <span className="flex items-center gap-1.5">{away.name} <Flag team={away} className="w-5" /></span>
           </div>
           {match.events.map((event, i) => (
             <EventRow key={i} event={event} />
@@ -115,7 +116,7 @@ function MatchCard({ match }: { match: Match }) {
         </span>
         <div className="flex flex-1 items-center justify-end gap-2 text-right">
           <span className="font-medium">{home.name}</span>
-          <span className="text-2xl">{home.flag}</span>
+          <Flag team={home} className="w-7" />
         </div>
         <div className="w-20 shrink-0 text-center">
           {finished ? (
@@ -127,7 +128,7 @@ function MatchCard({ match }: { match: Match }) {
           )}
         </div>
         <div className="flex flex-1 items-center gap-2">
-          <span className="text-2xl">{away.flag}</span>
+          <Flag team={away} className="w-7" />
           <span className="font-medium">{away.name}</span>
         </div>
         <span className="hidden w-44 shrink-0 text-right text-xs text-slate-400 md:block">

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { scorers } from '../data/scorers';
 import { teamById } from '../data/teams';
+import Flag from './Flag';
 
 function PlayerAvatar({ name, photo }: { name: string; photo?: string }) {
   const [failed, setFailed] = useState(false);
@@ -84,8 +85,10 @@ export default function ScorersSection() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-slate-300">
-                    <span className="mr-2">{team.flag}</span>
-                    {team.name}
+                    <span className="flex items-center gap-2">
+                      <Flag team={team} className="w-5" />
+                      {team.name}
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-center text-lg font-bold text-emerald-400">
                     {s.goals}

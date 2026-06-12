@@ -1,5 +1,6 @@
 import { bracketById, type BracketMatch } from '../data/bracket';
 import { teamById } from '../data/teams';
+import Flag from './Flag';
 
 function Slot({ teamId, label, score, won }: { teamId?: string; label: string; score?: number; won?: boolean }) {
   const team = teamId ? teamById(teamId) : undefined;
@@ -7,7 +8,7 @@ function Slot({ teamId, label, score, won }: { teamId?: string; label: string; s
     <div className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs ${won ? 'font-bold text-emerald-300' : 'text-slate-300'}`}>
       {team ? (
         <>
-          <span className="text-base leading-none">{team.flag}</span>
+          <Flag team={team} className="w-4" />
           <span className="truncate">{team.name}</span>
         </>
       ) : (
