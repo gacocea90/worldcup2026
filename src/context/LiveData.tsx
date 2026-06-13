@@ -14,7 +14,7 @@ export interface Overlay {
   homeScore?: number;
   awayScore?: number;
   matchTime: string; // live clock, e.g. "67'"
-  goals: { side: 'home' | 'away'; teamId: string; player: string; minute: string }[];
+  goals: { side: 'home' | 'away'; teamId: string; player: string; minute: string; ownGoal?: boolean }[];
 }
 
 export interface ScorerRow {
@@ -68,7 +68,7 @@ async function fetchGoals(idStage: string, idMatch: string, homeId: string, away
   const goals: Overlay['goals'] = [];
   for (const [key, side, teamId] of [['HomeTeam', 'home', homeId], ['AwayTeam', 'away', awayId]] as const) {
     for (const g of d[key]?.Goals ?? []) {
-      goals.push({ side, teamId, player: names.get(g.IdPlayer) ?? 'Unknown', minute: g.Minute ?? '' });
+      goals.push({ side, teamId, player: names.get(g.IdPlayer) ?? 'Unknown', minute: g.Minute ?? '', ownGoal: g.Type === 3 });
     }
   }
   return goals.sort((a, b) => parseInt(a.minute) - parseInt(b.minute));
@@ -103,7 +103,7 @@ async function loadOverlay(): Promise<Map<string, Overlay>> {
 
   // Fetch goal timelines for finished/live games; cache finished ones for the session.
   await mapLimit(needGoals, 6, async (g) => {
-    const cacheKey = `wc-goals-${g.idMatch}`;
+    const cacheKey = `wc-goals-v2-${g.idMatch}`;
     try {
       if (!g.live) {
         const cached = sessionStorage.getItem(cacheKey);
@@ -129,6 +129,7 @@ function buildScorers(overlay: Map<string, Overlay>): ScorerRow[] {
   const tally = new Map<string, ScorerRow>();
   for (const o of overlay.values()) {
     for (const g of o.goals) {
+      if (g.ownGoal) continue; // own goals don't count toward the Golden Boot
       const norm = normalize(g.player);
       const nice = curated.get(norm);
       const key = norm + g.teamId;
@@ -187,7 +188,13 @@ export function applyOverlay(m: Match, overlay: Map<string, Overlay>): Match & {
   const events: MatchEvent[] | undefined =
     m.events ??
     (o.goals.length
-      ? o.goals.map((g) => ({ minute: g.minute, type: 'goal' as const, side: g.side, player: g.player }))
+      ? o.goals.map((g) => ({
+          minute: g.minute,
+          type: 'goal' as const,
+          side: g.side,
+          player: g.player,
+          note: g.ownGoal ? 'own goal' : undefined,
+        }))
       : undefined);
   return {
     ...m,
