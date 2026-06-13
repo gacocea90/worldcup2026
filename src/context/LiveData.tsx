@@ -14,6 +14,7 @@ export interface Overlay {
   homeScore?: number;
   awayScore?: number;
   matchTime: string; // live clock, e.g. "67'"
+  kickoff?: string; // authoritative UTC kickoff (ISO) from FIFA
   goals: { side: 'home' | 'away'; teamId: string; player: string; minute: string; ownGoal?: boolean }[];
 }
 
@@ -94,6 +95,7 @@ async function loadOverlay(): Promise<Map<string, Overlay>> {
       homeScore: m.Home?.Score ?? undefined,
       awayScore: m.Away?.Score ?? undefined,
       matchTime: m.MatchTime ?? '',
+      kickoff: m.Date ?? undefined,
       goals: [],
     });
     if (status === 'finished' || status === 'live') {

@@ -102,7 +102,7 @@ function formatDate(key: string): string {
   });
 }
 
-function MatchCard({ match }: { match: LiveMatch }) {
+function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
   const [expanded, setExpanded] = useState(false);
   const home = teamById(match.home);
   const away = teamById(match.away);
@@ -135,7 +135,7 @@ function MatchCard({ match }: { match: LiveMatch }) {
               {match.homeScore} – {match.awayScore}
             </span>
           ) : (
-            <span className="text-sm font-semibold text-slate-400">{localTime(kickoffUtc(match))}</span>
+            <span className="text-sm font-semibold text-slate-400">{localTime(kickoff)}</span>
           )}
           {live && (
             <span className="mt-1 flex items-center justify-center gap-1 text-[10px] font-bold text-red-400">
@@ -174,14 +174,16 @@ export default function MatchesSection() {
 
   const { overlay } = useLiveData();
 
-  // Each match tagged with its Romania-local date key and kickoff instant,
-  // with live/finished scores from the FIFA feed applied on top.
+  // Each match tagged with its Romania-local date key and kickoff instant.
+  // Kickoff comes from FIFA's authoritative UTC timestamp when available,
+  // falling back to the static venue-local schedule before the feed loads.
   const dated = useMemo(
     () =>
       matches
         .map((m) => {
           const merged = applyOverlay(m, overlay);
-          const kickoff = kickoffUtc(merged);
+          const fifaKickoff = overlay.get(`${m.home}-${m.away}`)?.kickoff;
+          const kickoff = fifaKickoff ? new Date(fifaKickoff) : kickoffUtc(merged);
           return { m: merged, kickoff, dateKey: localDateKey(kickoff) };
         })
         .sort((a, b) => a.kickoff.getTime() - b.kickoff.getTime()),
@@ -208,9 +210,9 @@ export default function MatchesSection() {
   );
 
   const byDate = useMemo(() => {
-    const map = new Map<string, Match[]>();
-    for (const { m, dateKey } of filtered) {
-      (map.get(dateKey) ?? map.set(dateKey, []).get(dateKey)!).push(m);
+    const map = new Map<string, { m: LiveMatch; kickoff: Date }[]>();
+    for (const { m, kickoff, dateKey } of filtered) {
+      (map.get(dateKey) ?? map.set(dateKey, []).get(dateKey)!).push({ m, kickoff });
     }
     return [...map.entries()];
   }, [filtered]);
@@ -271,8 +273,8 @@ export default function MatchesSection() {
               )}
             </h3>
             <div className="space-y-2">
-              {dayMatches.map((m) => (
-                <MatchCard key={m.id} match={m} />
+              {dayMatches.map(({ m, kickoff }) => (
+                <MatchCard key={m.id} match={m} kickoff={kickoff} />
               ))}
             </div>
           </div>

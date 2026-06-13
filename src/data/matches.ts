@@ -126,7 +126,7 @@ export const matches: Match[] = [
   { id: 5, date: '2026-06-13', time: '12:00 PT', group: 'B', home: 'QAT', away: 'SUI', venue: "Levi's Stadium", city: 'San Francisco Bay Area', status: 'upcoming' },
   { id: 6, date: '2026-06-13', time: '18:00 ET', group: 'C', home: 'BRA', away: 'MAR', venue: 'MetLife Stadium', city: 'New York / New Jersey', status: 'upcoming' },
   { id: 7, date: '2026-06-13', time: '21:00 ET', group: 'C', home: 'HAI', away: 'SCO', venue: 'Gillette Stadium', city: 'Boston', status: 'upcoming' },
-  { id: 8, date: '2026-06-13', time: '18:00 PT', group: 'D', home: 'AUS', away: 'TUR', venue: 'BC Place', city: 'Vancouver', status: 'upcoming' },
+  { id: 8, date: '2026-06-13', time: '21:00 PT', group: 'D', home: 'AUS', away: 'TUR', venue: 'BC Place', city: 'Vancouver', status: 'upcoming' },
   // Sunday, June 14
   { id: 9, date: '2026-06-14', time: '12:00 CDT', group: 'E', home: 'GER', away: 'CUW', venue: 'NRG Stadium', city: 'Houston', status: 'upcoming' },
   { id: 10, date: '2026-06-14', time: '15:00 CDT', group: 'F', home: 'NED', away: 'JPN', venue: 'AT&T Stadium', city: 'Dallas', status: 'upcoming' },
@@ -156,7 +156,7 @@ export const matches: Match[] = [
   { id: 29, date: '2026-06-19', time: '12:00 PT', group: 'D', home: 'USA', away: 'AUS', venue: 'Lumen Field', city: 'Seattle', status: 'upcoming' },
   { id: 30, date: '2026-06-19', time: '18:00 ET', group: 'C', home: 'SCO', away: 'MAR', venue: 'Gillette Stadium', city: 'Boston', status: 'upcoming' },
   { id: 31, date: '2026-06-19', time: '20:30 ET', group: 'C', home: 'BRA', away: 'HAI', venue: 'Lincoln Financial Field', city: 'Philadelphia', status: 'upcoming' },
-  { id: 32, date: '2026-06-19', time: '21:00 PT', group: 'D', home: 'TUR', away: 'PAR', venue: "Levi's Stadium", city: 'San Francisco Bay Area', status: 'upcoming' },
+  { id: 32, date: '2026-06-19', time: '20:00 PT', group: 'D', home: 'TUR', away: 'PAR', venue: "Levi's Stadium", city: 'San Francisco Bay Area', status: 'upcoming' },
   // Saturday, June 20
   { id: 33, date: '2026-06-20', time: '12:00 CDT', group: 'F', home: 'NED', away: 'SWE', venue: 'NRG Stadium', city: 'Houston', status: 'upcoming' },
   { id: 34, date: '2026-06-20', time: '16:00 ET', group: 'E', home: 'GER', away: 'CIV', venue: 'BMO Field', city: 'Toronto', status: 'upcoming' },
