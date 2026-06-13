@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import BracketSection from './components/BracketSection';
+import HeaderBanner from './components/HeaderBanner';
 import LiveNow from './components/LiveNow';
 import MatchesSection from './components/MatchesSection';
 import ScorersSection from './components/ScorersSection';
@@ -14,19 +15,14 @@ export default function App() {
   return (
     <LiveDataProvider>
     <div className="min-h-screen bg-slate-900 text-slate-100">
-      <header className="border-b border-slate-800 bg-gradient-to-r from-emerald-950 via-slate-900 to-sky-950">
-        <div className="mx-auto max-w-5xl px-4 py-8">
-          <p className="text-sm font-semibold uppercase tracking-widest text-emerald-400">
-            Canada · Mexico · United States
-          </p>
-          <h1 className="mt-1 text-3xl font-extrabold sm:text-4xl">
-            ⚽ World Cup 2026 Tracker
-          </h1>
-          <p className="mt-2 text-sm text-slate-400">
+      <header className="border-b border-slate-800 bg-slate-950">
+        <div className="mx-auto max-w-5xl">
+          <HeaderBanner />
+          <p className="px-4 pb-3 text-center text-sm text-slate-400">
             48 teams · 104 matches · June 11 – July 19, 2026
           </p>
         </div>
-        <nav className="mx-auto flex max-w-5xl gap-1 px-4">
+        <nav className="mx-auto flex max-w-5xl justify-center gap-1 px-4">
           {(
             [
               ['matches', 'Matches'],
