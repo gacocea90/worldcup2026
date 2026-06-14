@@ -23,4 +23,9 @@ export const scorers: Scorer[] = [
   { player: 'John McGinn', teamId: 'SCO', goals: 1, photo: '/players/john-mcginn.jpg' },
   { player: 'Nestory Irankunda', teamId: 'AUS', goals: 1, photo: '/players/nestory-irankunda.jpg' },
   { player: 'Connor Metcalfe', teamId: 'AUS', goals: 1, photo: '/players/connor-metcalfe.jpg' },
+  { player: 'Kai Havertz', teamId: 'GER', goals: 2, photo: '/players/kai-havertz.jpg' },
+  { player: 'Felix Nmecha', teamId: 'GER', goals: 1, photo: '/players/felix-nmecha.jpg' },
+  { player: 'Nico Schlotterbeck', teamId: 'GER', goals: 1, photo: '/players/nico-schlotterbeck.jpg' },
+  { player: 'Jamal Musiala', teamId: 'GER', goals: 1, photo: '/players/jamal-musiala.jpg' },
+  { player: 'Deniz Undav', teamId: 'GER', goals: 1, photo: '/players/deniz-undav.jpg' },
 ];

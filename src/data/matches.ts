@@ -191,7 +191,25 @@ export const matches: Match[] = [
     ],
   },
   // Sunday, June 14
-  { id: 9, date: '2026-06-14', time: '12:00 CDT', group: 'E', home: 'GER', away: 'CUW', venue: 'NRG Stadium', city: 'Houston', status: 'upcoming' },
+  {
+    id: 9, date: '2026-06-14', time: '12:00 CDT', group: 'E', home: 'GER', away: 'CUW', venue: 'NRG Stadium', city: 'Houston', status: 'finished', homeScore: 7, awayScore: 1,
+    events: [
+      { minute: "6'", type: 'goal', side: 'home', player: 'Felix Nmecha' },
+      { minute: "21'", type: 'goal', side: 'away', player: 'Livano Comenencia' },
+      { minute: "38'", type: 'goal', side: 'home', player: 'Nico Schlotterbeck' },
+      { minute: "45+5'", type: 'goal', side: 'home', player: 'Kai Havertz', note: 'penalty' },
+      { minute: "47'", type: 'goal', side: 'home', player: 'Jamal Musiala' },
+      { minute: "68'", type: 'goal', side: 'home', player: 'Nathaniel Brown' },
+      { minute: "78'", type: 'goal', side: 'home', player: 'Deniz Undav' },
+      { minute: "88'", type: 'goal', side: 'home', player: 'Kai Havertz' },
+    ],
+    stats: [
+      { label: 'Expected goals (xG)', home: 3.91, away: 0.40 },
+      { label: 'Total shots', home: 34, away: 8 },
+      { label: 'Shots on target', home: 7, away: 2 },
+      { label: 'Saves', home: 1, away: 4 },
+    ],
+  },
   { id: 10, date: '2026-06-14', time: '15:00 CDT', group: 'F', home: 'NED', away: 'JPN', venue: 'AT&T Stadium', city: 'Dallas', status: 'upcoming' },
   { id: 11, date: '2026-06-14', time: '19:00 ET', group: 'E', home: 'CIV', away: 'ECU', venue: 'Lincoln Financial Field', city: 'Philadelphia', status: 'upcoming' },
   { id: 12, date: '2026-06-14', time: '20:00 CST', group: 'F', home: 'SWE', away: 'TUN', venue: 'Estadio BBVA', city: 'Monterrey', status: 'upcoming' },
