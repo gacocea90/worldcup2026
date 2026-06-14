@@ -22,7 +22,7 @@ export default function App() {
             48 teams · 104 matches · June 11 – July 19, 2026
           </p>
         </div>
-        <nav className="mx-auto flex max-w-5xl justify-center gap-1 px-4">
+        <nav className="no-scrollbar mx-auto flex max-w-5xl gap-1 overflow-x-auto px-4 sm:justify-center">
           {(
             [
               ['matches', 'Matches'],
@@ -34,7 +34,7 @@ export default function App() {
             <button
               key={id}
               onClick={() => setTab(id)}
-              className={`rounded-t-lg px-5 py-3 text-sm font-bold transition ${
+              className={`shrink-0 whitespace-nowrap rounded-t-lg px-4 py-3 text-sm font-bold transition sm:px-5 ${
                 tab === id
                   ? 'bg-slate-900 text-emerald-400 shadow-[inset_0_2px_0_theme(colors.emerald.500)]'
                   : 'text-slate-400 hover:text-slate-200'

@@ -102,6 +102,18 @@ function formatDate(key: string): string {
   });
 }
 
+function LiveTick({ label }: { label: string }) {
+  return (
+    <span className="flex items-center gap-1 text-[10px] font-bold text-red-400">
+      <span className="relative flex h-1.5 w-1.5">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
+        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
+      </span>
+      {label}
+    </span>
+  );
+}
+
 function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
   const [expanded, setExpanded] = useState(false);
   const home = teamById(match.home);
@@ -109,6 +121,8 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
   const live = Boolean(match.live);
   const finished = match.status === 'finished';
   const hasDetails = finished && Boolean(match.events?.length || match.stats?.length);
+  const scoreColor = live ? 'text-red-300' : 'text-emerald-400';
+
   return (
     <div className="rounded-xl border border-slate-700/60 bg-slate-800/60 transition hover:border-emerald-500/50">
       <div
@@ -116,51 +130,69 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
         tabIndex={hasDetails ? 0 : undefined}
         onClick={hasDetails ? () => setExpanded((e) => !e) : undefined}
         onKeyDown={hasDetails ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpanded((x) => !x); } } : undefined}
-        className={`flex items-center gap-3 px-4 py-3 ${hasDetails ? 'cursor-pointer select-none hover:bg-slate-800 rounded-xl' : ''}`}
+        className={`${hasDetails ? 'cursor-pointer select-none rounded-xl hover:bg-slate-800' : ''}`}
       >
-        <span className="w-16 shrink-0 rounded-md bg-slate-700/60 px-2 py-1 text-center text-xs font-semibold text-slate-300">
-          Grp {match.group}
-        </span>
-        <div className="flex flex-1 items-center justify-end gap-2 text-right">
-          <span className="font-medium">{home.name}</span>
-          <Flag team={home} className="w-7" />
+        {/* Mobile: stacked rows */}
+        <div className="px-3 py-2.5 sm:hidden">
+          <div className="space-y-1.5">
+            {([['home', home], ['away', away]] as const).map(([side, team]) => (
+              <div key={side} className="flex items-center gap-2">
+                <Flag team={team} className="w-6" />
+                <span className="min-w-0 flex-1 truncate font-medium">{team.name}</span>
+                {finished && (
+                  <span className={`shrink-0 text-lg font-bold ${scoreColor}`}>
+                    {side === 'home' ? match.homeScore : match.awayScore}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="mt-2 flex items-center gap-2 text-xs text-slate-500">
+            <span className="rounded bg-slate-700/60 px-1.5 py-0.5 font-semibold text-slate-300">Grp {match.group}</span>
+            {live ? (
+              <LiveTick label={match.matchTime || 'LIVE'} />
+            ) : (
+              <span>{finished ? 'Full time' : localTime(kickoff)}</span>
+            )}
+            <span className="truncate">· {match.city}</span>
+            {hasDetails && <span className="ml-auto shrink-0">{expanded ? '▲' : '▼'}</span>}
+          </div>
         </div>
-        <div className="w-20 shrink-0 text-center">
-          {finished ? (
-            <span
-              className={`rounded-lg px-3 py-1 text-lg font-bold ${
-                live ? 'bg-red-500/15 text-red-300' : 'bg-emerald-500/15 text-emerald-400'
-              }`}
-            >
-              {match.homeScore} – {match.awayScore}
-            </span>
-          ) : (
-            <span className="text-sm font-semibold text-slate-400">{localTime(kickoff)}</span>
-          )}
-          {live && (
-            <span className="mt-1 flex items-center justify-center gap-1 text-[10px] font-bold text-red-400">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
-              </span>
-              {match.matchTime || 'LIVE'}
-            </span>
-          )}
-        </div>
-        <div className="flex flex-1 items-center gap-2">
-          <Flag team={away} className="w-7" />
-          <span className="font-medium">{away.name}</span>
-        </div>
-        <span className="hidden w-44 shrink-0 text-right text-xs text-slate-400 md:block">
-          {match.venue}
-          <br />
-          {match.city}
-        </span>
-        {hasDetails && (
-          <span className={`shrink-0 text-xs text-slate-500 transition-transform ${expanded ? 'rotate-180' : ''}`}>
-            ▼
+
+        {/* Desktop: teams flanking the score */}
+        <div className="hidden items-center gap-3 px-4 py-3 sm:flex">
+          <span className="w-16 shrink-0 rounded-md bg-slate-700/60 px-2 py-1 text-center text-xs font-semibold text-slate-300">
+            Grp {match.group}
           </span>
-        )}
+          <div className="flex min-w-0 flex-1 items-center justify-end gap-2 text-right">
+            <span className="truncate font-medium">{home.name}</span>
+            <Flag team={home} className="w-7" />
+          </div>
+          <div className="w-20 shrink-0 text-center">
+            {finished ? (
+              <span className={`rounded-lg px-3 py-1 text-lg font-bold ${live ? 'bg-red-500/15 text-red-300' : 'bg-emerald-500/15 text-emerald-400'}`}>
+                {match.homeScore} – {match.awayScore}
+              </span>
+            ) : (
+              <span className="text-sm font-semibold text-slate-400">{localTime(kickoff)}</span>
+            )}
+            {live && <span className="mt-1 flex justify-center"><LiveTick label={match.matchTime || 'LIVE'} /></span>}
+          </div>
+          <div className="flex min-w-0 flex-1 items-center gap-2">
+            <Flag team={away} className="w-7" />
+            <span className="truncate font-medium">{away.name}</span>
+          </div>
+          <span className="hidden w-44 shrink-0 text-right text-xs text-slate-400 lg:block">
+            {match.venue}
+            <br />
+            {match.city}
+          </span>
+          {hasDetails && (
+            <span className={`shrink-0 text-xs text-slate-500 transition-transform ${expanded ? 'rotate-180' : ''}`}>
+              ▼
+            </span>
+          )}
+        </div>
       </div>
       {expanded && hasDetails && <MatchDetails match={match} />}
     </div>

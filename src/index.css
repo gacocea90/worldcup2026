@@ -3,3 +3,12 @@
 html {
   background-color: #0f172a; /* slate-900 — avoids white overscroll flashes */
 }
+
+/* Hide scrollbar on the tab strip while keeping it horizontally scrollable */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
