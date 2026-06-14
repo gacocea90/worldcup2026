@@ -17,4 +17,10 @@ export const scorers: Scorer[] = [
   { player: 'Jovo Lukić', teamId: 'BIH', goals: 1, photo: '/players/jovo-lukic.jpg' },
   { player: 'Folarin Balogun', teamId: 'USA', goals: 2, photo: '/players/folarin-balogun.jpg' },
   { player: 'Giovanni Reyna', teamId: 'USA', goals: 1, photo: '/players/giovanni-reyna.jpg' },
+  { player: 'Breel Embolo', teamId: 'SUI', goals: 1, photo: '/players/breel-embolo.jpg' },
+  { player: 'Vinícius Júnior', teamId: 'BRA', goals: 1, photo: '/players/vinicius-junior.jpg' },
+  { player: 'Ismael Saibari', teamId: 'MAR', goals: 1, photo: '/players/ismael-saibari.jpg' },
+  { player: 'John McGinn', teamId: 'SCO', goals: 1, photo: '/players/john-mcginn.jpg' },
+  { player: 'Nestory Irankunda', teamId: 'AUS', goals: 1, photo: '/players/nestory-irankunda.jpg' },
+  { player: 'Connor Metcalfe', teamId: 'AUS', goals: 1, photo: '/players/connor-metcalfe.jpg' },
 ];

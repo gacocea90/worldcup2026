@@ -123,10 +123,73 @@ export const matches: Match[] = [
     ],
   },
   // Saturday, June 13
-  { id: 5, date: '2026-06-13', time: '12:00 PT', group: 'B', home: 'QAT', away: 'SUI', venue: "Levi's Stadium", city: 'San Francisco Bay Area', status: 'upcoming' },
-  { id: 6, date: '2026-06-13', time: '18:00 ET', group: 'C', home: 'BRA', away: 'MAR', venue: 'MetLife Stadium', city: 'New York / New Jersey', status: 'upcoming' },
-  { id: 7, date: '2026-06-13', time: '21:00 ET', group: 'C', home: 'HAI', away: 'SCO', venue: 'Gillette Stadium', city: 'Boston', status: 'upcoming' },
-  { id: 8, date: '2026-06-13', time: '21:00 PT', group: 'D', home: 'AUS', away: 'TUR', venue: 'BC Place', city: 'Vancouver', status: 'upcoming' },
+  {
+    id: 5, date: '2026-06-13', time: '12:00 PT', group: 'B', home: 'QAT', away: 'SUI', venue: "Levi's Stadium", city: 'San Francisco Bay Area', status: 'finished', homeScore: 1, awayScore: 1,
+    events: [
+      { minute: "13'", type: 'yellow', side: 'home', player: 'Mahmoud Abunada' },
+      { minute: "17'", type: 'goal', side: 'away', player: 'Breel Embolo', note: 'penalty' },
+      { minute: "23'", type: 'yellow', side: 'home', player: 'Jassem Gaber' },
+      { minute: "42'", type: 'yellow', side: 'away', player: 'Denis Zakaria' },
+      { minute: "90+4'", type: 'goal', side: 'home', player: 'Miro Muheim', note: 'own goal' },
+    ],
+    stats: [
+      { label: 'Expected goals (xG)', home: 0.76, away: 3.24 },
+      { label: 'Total shots', home: 8, away: 11 },
+      { label: 'Shots on target', home: 2, away: 6 },
+      { label: 'Saves', home: 5, away: 3 },
+      { label: 'Yellow cards', home: 2, away: 1 },
+    ],
+  },
+  {
+    id: 6, date: '2026-06-13', time: '18:00 ET', group: 'C', home: 'BRA', away: 'MAR', venue: 'MetLife Stadium', city: 'New York / New Jersey', status: 'finished', homeScore: 1, awayScore: 1,
+    events: [
+      { minute: "21'", type: 'goal', side: 'away', player: 'Ismael Saibari' },
+      { minute: "32'", type: 'goal', side: 'home', player: 'Vinícius Júnior' },
+      { minute: "37'", type: 'yellow', side: 'home', player: 'Casemiro' },
+      { minute: "43'", type: 'yellow', side: 'home', player: 'Roger Ibañez' },
+    ],
+    stats: [
+      { label: 'Ball possession', home: 51, away: 49, unit: '%' },
+      { label: 'Expected goals (xG)', home: 1.26, away: 1.37 },
+      { label: 'Total shots', home: 5, away: 3 },
+      { label: 'Saves', home: 2, away: 4 },
+      { label: 'Fouls', home: 16, away: 14 },
+      { label: 'Yellow cards', home: 2, away: 0 },
+    ],
+  },
+  {
+    id: 7, date: '2026-06-13', time: '21:00 ET', group: 'C', home: 'HAI', away: 'SCO', venue: 'Gillette Stadium', city: 'Boston', status: 'finished', homeScore: 0, awayScore: 1,
+    events: [
+      { minute: "28'", type: 'goal', side: 'away', player: 'John McGinn' },
+      { minute: "39'", type: 'yellow', side: 'home', player: 'Jean-Ricner Bellegarde' },
+      { minute: "46'", type: 'yellow', side: 'away', player: 'Aaron Hickey' },
+      { minute: "90+1'", type: 'yellow', side: 'away', player: 'Findlay Curtis' },
+      { minute: "90+5'", type: 'yellow', side: 'away', player: 'Kenny McLean' },
+    ],
+    stats: [
+      { label: 'Ball possession', home: 54, away: 46, unit: '%' },
+      { label: 'Expected goals (xG)', home: 1.05, away: 1.05 },
+      { label: 'Total shots', home: 13, away: 9 },
+      { label: 'Shots on target', home: 2, away: 2 },
+      { label: 'Saves', home: 2, away: 1 },
+      { label: 'Fouls', home: 23, away: 21 },
+      { label: 'Yellow cards', home: 1, away: 3 },
+    ],
+  },
+  {
+    id: 8, date: '2026-06-13', time: '21:00 PT', group: 'D', home: 'AUS', away: 'TUR', venue: 'BC Place', city: 'Vancouver', status: 'finished', homeScore: 2, awayScore: 0,
+    events: [
+      { minute: "27'", type: 'goal', side: 'home', player: 'Nestory Irankunda' },
+      { minute: "75'", type: 'goal', side: 'home', player: 'Connor Metcalfe' },
+      { minute: "86'", type: 'yellow', side: 'away', player: 'Yunus Akgün' },
+    ],
+    stats: [
+      { label: 'Ball possession', home: 28, away: 72, unit: '%' },
+      { label: 'Expected goals (xG)', home: 0.77, away: 1.33 },
+      { label: 'Total shots', home: 9, away: 30 },
+      { label: 'Yellow cards', home: 0, away: 1 },
+    ],
+  },
   // Sunday, June 14
   { id: 9, date: '2026-06-14', time: '12:00 CDT', group: 'E', home: 'GER', away: 'CUW', venue: 'NRG Stadium', city: 'Houston', status: 'upcoming' },
   { id: 10, date: '2026-06-14', time: '15:00 CDT', group: 'F', home: 'NED', away: 'JPN', venue: 'AT&T Stadium', city: 'Dallas', status: 'upcoming' },
