@@ -26,7 +26,7 @@ export default function App() {
           {(
             [
               ['matches', 'Matches'],
-              ['teams', 'Teams & Players'],
+              ['teams', 'Groups'],
               ['scorers', 'Top Scorers'],
               ['bracket', 'Bracket'],
             ] as [Tab, string][]
