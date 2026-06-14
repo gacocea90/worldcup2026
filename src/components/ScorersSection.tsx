@@ -3,7 +3,7 @@ import { teamById } from '../data/teams';
 import { useLiveData } from '../context/LiveData';
 import Flag from './Flag';
 
-function PlayerAvatar({ name, photo }: { name: string; photo?: string }) {
+function PlayerAvatar({ name, photo, size = 'h-12 w-12 text-sm' }: { name: string; photo?: string; size?: string }) {
   const [failed, setFailed] = useState(false);
   const initials = name
     .split(' ')
@@ -12,7 +12,7 @@ function PlayerAvatar({ name, photo }: { name: string; photo?: string }) {
     .join('');
   if (!photo || failed) {
     return (
-      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-slate-700 text-sm font-bold text-slate-300">
+      <span className={`flex shrink-0 items-center justify-center rounded-full bg-slate-700 font-bold text-slate-300 ${size}`}>
         {initials}
       </span>
     );
@@ -22,8 +22,52 @@ function PlayerAvatar({ name, photo }: { name: string; photo?: string }) {
       src={photo}
       alt={name}
       onError={() => setFailed(true)}
-      className="h-12 w-12 shrink-0 rounded-full border border-slate-600 object-cover object-top"
+      className={`shrink-0 rounded-full border border-slate-600 object-cover object-top ${size}`}
     />
+  );
+}
+
+interface RankedScorer {
+  player: string;
+  teamId: string;
+  goals: number;
+  photo?: string;
+  rank: number;
+}
+
+function PodiumSpot({ s, place }: { s: RankedScorer; place: 1 | 2 | 3 }) {
+  const team = teamById(s.teamId);
+  const medal = place === 1 ? '🥇' : place === 2 ? '🥈' : '🥉';
+  const height = place === 1 ? 'h-24' : place === 2 ? 'h-16' : 'h-12';
+  const ring = place === 1 ? 'ring-2 ring-amber-400' : 'ring-1 ring-slate-600';
+  const order = place === 1 ? 'order-2' : place === 2 ? 'order-1' : 'order-3';
+  return (
+    <div className={`flex flex-1 flex-col items-center ${order}`}>
+      <span className="mb-1 text-lg">{medal}</span>
+      <div className={`rounded-full ${ring}`}>
+        <PlayerAvatar name={s.player} photo={s.photo} size={place === 1 ? 'h-20 w-20 text-lg' : 'h-14 w-14 text-sm'} />
+      </div>
+      <span className="mt-2 flex items-center gap-1.5 text-center text-xs font-semibold sm:text-sm">
+        <Flag team={team} className="w-4" />
+        <span className="max-w-[7rem] truncate">{s.player}</span>
+      </span>
+      <div className={`mt-1 flex w-full ${height} items-start justify-center rounded-t-lg bg-gradient-to-b from-slate-700/80 to-slate-800/40 pt-1.5`}>
+        <span className="font-display text-2xl font-bold text-emerald-400">{s.goals}</span>
+      </div>
+    </div>
+  );
+}
+
+function Podium({ top }: { top: RankedScorer[] }) {
+  if (top.length < 3) return null;
+  return (
+    <div className="mb-8 rounded-2xl border border-slate-700/60 bg-slate-800/30 p-5">
+      <div className="mx-auto flex max-w-md items-end gap-3">
+        <PodiumSpot s={top[1]} place={2} />
+        <PodiumSpot s={top[0]} place={1} />
+        <PodiumSpot s={top[2]} place={3} />
+      </div>
+    </div>
   );
 }
 
@@ -47,13 +91,15 @@ export default function ScorersSection() {
   return (
     <section>
       <div className="mb-6 flex items-baseline justify-between">
-        <h2 className="text-xl font-bold">
+        <h2 className="font-display text-2xl font-semibold uppercase tracking-wide">
           🏆 Golden Boot race
         </h2>
         <span className="text-sm text-slate-400">
           {scorers.reduce((sum, s) => sum + s.goals, 0)} goals scored so far
         </span>
       </div>
+
+      <Podium top={ranked} />
 
       <div className="overflow-hidden rounded-2xl border border-slate-700/60">
         <table className="w-full text-sm">

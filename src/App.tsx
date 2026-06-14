@@ -3,14 +3,15 @@ import BracketSection from './components/BracketSection';
 import HeaderBanner from './components/HeaderBanner';
 import LiveNow from './components/LiveNow';
 import MatchesSection from './components/MatchesSection';
+import OverviewSection from './components/OverviewSection';
 import ScorersSection from './components/ScorersSection';
 import TeamsSection from './components/TeamsSection';
 import { LiveDataProvider } from './context/LiveData';
 
-type Tab = 'matches' | 'teams' | 'scorers' | 'bracket';
+type Tab = 'overview' | 'matches' | 'teams' | 'scorers' | 'bracket';
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>('matches');
+  const [tab, setTab] = useState<Tab>('overview');
 
   return (
     <LiveDataProvider>
@@ -25,6 +26,7 @@ export default function App() {
         <nav className="no-scrollbar mx-auto flex max-w-5xl gap-1 overflow-x-auto px-4 sm:justify-center">
           {(
             [
+              ['overview', 'Overview'],
               ['matches', 'Matches'],
               ['teams', 'Groups'],
               ['scorers', 'Top Scorers'],
@@ -46,8 +48,9 @@ export default function App() {
         </nav>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-8">
+      <main key={tab} className="animate-fade-in mx-auto max-w-5xl px-4 py-8">
         <LiveNow />
+        {tab === 'overview' && <OverviewSection />}
         {tab === 'matches' && <MatchesSection />}
         {tab === 'teams' && <TeamsSection />}
         {tab === 'scorers' && <ScorersSection />}

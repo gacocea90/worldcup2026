@@ -3,6 +3,7 @@ import { knockoutRounds, matches, type Match, type MatchEvent } from '../data/ma
 import { groups, teamById } from '../data/teams';
 import { kickoffUtc, localDateKey, localTime, todayKey } from '../utils/time';
 import { applyOverlay, useLiveData } from '../context/LiveData';
+import { teamColor } from '../data/colors';
 import Flag from './Flag';
 
 type LiveMatch = Match & { live?: boolean; matchTime?: string };
@@ -65,7 +66,7 @@ function MatchDetails({ match }: { match: Match }) {
   const home = teamById(match.home);
   const away = teamById(match.away);
   return (
-    <div className="space-y-5 border-t border-slate-700/60 px-4 py-4">
+    <div className="animate-reveal space-y-5 border-t border-slate-700/60 px-4 py-4">
       {match.events && match.events.length > 0 && (
         <div>
           <div className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -124,7 +125,14 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
   const scoreColor = live ? 'text-red-300' : 'text-emerald-400';
 
   return (
-    <div className="rounded-xl border border-slate-700/60 bg-slate-800/60 transition hover:border-emerald-500/50">
+    <div
+      className="group relative overflow-hidden rounded-xl border border-slate-700/60 bg-slate-800/60 transition duration-200 hover:-translate-y-0.5 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-black/30"
+    >
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-[3px] opacity-70"
+        style={{ background: `linear-gradient(90deg, ${teamColor(match.home)}, ${teamColor(match.away)})` }}
+      />
       <div
         role={hasDetails ? 'button' : undefined}
         tabIndex={hasDetails ? 0 : undefined}
@@ -140,7 +148,7 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
                 <Flag team={team} className="w-6" />
                 <span className="min-w-0 flex-1 truncate font-medium">{team.name}</span>
                 {finished && (
-                  <span className={`shrink-0 text-lg font-bold ${scoreColor}`}>
+                  <span className={`font-display shrink-0 text-xl font-bold tabular-nums ${scoreColor}`}>
                     {side === 'home' ? match.homeScore : match.awayScore}
                   </span>
                 )}
@@ -170,7 +178,7 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
           </div>
           <div className="w-20 shrink-0 text-center">
             {finished ? (
-              <span className={`rounded-lg px-3 py-1 text-lg font-bold ${live ? 'bg-red-500/15 text-red-300' : 'bg-emerald-500/15 text-emerald-400'}`}>
+              <span className={`font-display rounded-lg px-3 py-1 text-xl font-bold tabular-nums ${live ? 'bg-red-500/15 text-red-300' : 'bg-emerald-500/15 text-emerald-400'}`}>
                 {match.homeScore} – {match.awayScore}
               </span>
             ) : (
@@ -296,7 +304,7 @@ export default function MatchesSection() {
       <div className="space-y-8">
         {byDate.map(([date, dayMatches]) => (
           <div key={date}>
-            <h3 className="mb-3 flex items-center gap-3 text-lg font-bold">
+            <h3 className="font-display mb-3 flex items-center gap-3 text-xl font-semibold uppercase tracking-wide">
               {formatDate(date)}
               {date === TODAY && (
                 <span className="rounded-full bg-emerald-500/20 px-3 py-0.5 text-xs font-bold uppercase tracking-wide text-emerald-400">
