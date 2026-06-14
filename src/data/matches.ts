@@ -210,7 +210,27 @@ export const matches: Match[] = [
       { label: 'Saves', home: 1, away: 4 },
     ],
   },
-  { id: 10, date: '2026-06-14', time: '15:00 CDT', group: 'F', home: 'NED', away: 'JPN', venue: 'AT&T Stadium', city: 'Dallas', status: 'upcoming' },
+  {
+    id: 10, date: '2026-06-14', time: '15:00 CDT', group: 'F', home: 'NED', away: 'JPN', venue: 'AT&T Stadium', city: 'Dallas', status: 'finished', homeScore: 2, awayScore: 2,
+    events: [
+      { minute: "50'", type: 'goal', side: 'home', player: 'Virgil van Dijk' },
+      { minute: "57'", type: 'goal', side: 'away', player: 'Keito Nakamura' },
+      { minute: "61'", type: 'yellow', side: 'home', player: 'Crysencio Summerville' },
+      { minute: "64'", type: 'goal', side: 'home', player: 'Crysencio Summerville' },
+      { minute: "83'", type: 'yellow', side: 'home', player: 'Memphis Depay' },
+      { minute: "88'", type: 'goal', side: 'away', player: 'Daichi Kamada' },
+      { minute: "90+1'", type: 'yellow', side: 'home', player: 'Micky van de Ven' },
+    ],
+    stats: [
+      { label: 'Ball possession', home: 60, away: 40, unit: '%' },
+      { label: 'Expected goals (xG)', home: 0.79, away: 0.54 },
+      { label: 'Total shots', home: 10, away: 10 },
+      { label: 'Shots on target', home: 6, away: 3 },
+      { label: 'Saves', home: 1, away: 4 },
+      { label: 'Fouls', home: 7, away: 7 },
+      { label: 'Yellow cards', home: 3, away: 0 },
+    ],
+  },
   { id: 11, date: '2026-06-14', time: '19:00 ET', group: 'E', home: 'CIV', away: 'ECU', venue: 'Lincoln Financial Field', city: 'Philadelphia', status: 'upcoming' },
   { id: 12, date: '2026-06-14', time: '20:00 CST', group: 'F', home: 'SWE', away: 'TUN', venue: 'Estadio BBVA', city: 'Monterrey', status: 'upcoming' },
   // Monday, June 15

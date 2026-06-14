@@ -28,4 +28,8 @@ export const scorers: Scorer[] = [
   { player: 'Nico Schlotterbeck', teamId: 'GER', goals: 1, photo: '/players/nico-schlotterbeck.jpg' },
   { player: 'Jamal Musiala', teamId: 'GER', goals: 1, photo: '/players/jamal-musiala.jpg' },
   { player: 'Deniz Undav', teamId: 'GER', goals: 1, photo: '/players/deniz-undav.jpg' },
+  { player: 'Virgil van Dijk', teamId: 'NED', goals: 1, photo: '/players/virgil-van-dijk.jpg' },
+  { player: 'Crysencio Summerville', teamId: 'NED', goals: 1, photo: '/players/crysencio-summerville.jpeg' },
+  { player: 'Keito Nakamura', teamId: 'JPN', goals: 1, photo: '/players/keito-nakamura.png' },
+  { player: 'Daichi Kamada', teamId: 'JPN', goals: 1, photo: '/players/daichi-kamada.jpg' },
 ];
