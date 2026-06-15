@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { matches as staticMatches, type Match, type MatchEvent } from '../data/matches';
 import { scorers as curatedScorers } from '../data/scorers';
+import { teamById } from '../data/teams';
+import { demonym } from '../data/demonyms';
 
 // FIFA's public match API (CORS-enabled, no key required).
 const API = 'https://api.fifa.com/api/v3';
@@ -151,9 +153,48 @@ function buildScorers(overlay: Map<string, Overlay>): ScorerRow[] {
   return [...tally.values()];
 }
 
+// --- Auto photos: resolve a player image from Wikipedia for any scorer
+// without a curated photo. Cached in localStorage so each lookup runs once.
+const PHOTO_CACHE_KEY = 'wc-autophotos-v1';
+
+function loadPhotoCache(): Record<string, string> {
+  try {
+    return JSON.parse(localStorage.getItem(PHOTO_CACHE_KEY) || '{}');
+  } catch {
+    return {};
+  }
+}
+function savePhotoCache(cache: Record<string, string>) {
+  try {
+    localStorage.setItem(PHOTO_CACHE_KEY, JSON.stringify(cache));
+  } catch {
+    /* storage full / unavailable — ignore */
+  }
+}
+
+async function fetchWikiPhoto(player: string, teamId: string): Promise<string> {
+  const country = teamById(teamId).name;
+  // Country in the query strongly disambiguates footballers with common names.
+  const search = encodeURIComponent(`${player} ${country} footballer`);
+  const url =
+    `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*` +
+    `&generator=search&gsrsearch=${search}&gsrlimit=1` +
+    `&prop=pageimages|extracts&piprop=thumbnail&pithumbsize=200&exintro=1&explaintext=1&exsentences=1`;
+  const d = await fetch(url).then((r) => r.json());
+  const first: any = Object.values(d?.query?.pages ?? {})[0];
+  const photo: string = first?.thumbnail?.source ?? '';
+  if (!photo) return '';
+  // Only trust the photo if the page's intro confirms the player's nationality —
+  // otherwise a common name can match the wrong (more famous) person.
+  const intro = (first?.extract ?? '').toLowerCase();
+  const ok = intro.includes(country.toLowerCase()) || (demonym(teamId) !== '' && intro.includes(demonym(teamId)));
+  return ok ? photo : '';
+}
+
 export function LiveDataProvider({ children }: { children: ReactNode }) {
   const [overlay, setOverlay] = useState<Map<string, Overlay>>(new Map());
   const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
+  const [autoPhotos, setAutoPhotos] = useState<Record<string, string>>(() => loadPhotoCache());
 
   useEffect(() => {
     let cancelled = false;
@@ -176,7 +217,39 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const scorers = useMemo(() => buildScorers(overlay), [overlay]);
+  const baseScorers = useMemo(() => buildScorers(overlay), [overlay]);
+
+  // Resolve photos for scorers that have no curated image yet.
+  useEffect(() => {
+    const missing = baseScorers.filter((s) => !s.photo && !(normalize(s.player) in autoPhotos));
+    if (missing.length === 0) return;
+    let cancelled = false;
+    (async () => {
+      const updates: Record<string, string> = {};
+      await mapLimit(missing, 3, async (s) => {
+        try {
+          updates[normalize(s.player)] = await fetchWikiPhoto(s.player, s.teamId);
+        } catch {
+          updates[normalize(s.player)] = ''; // mark as tried so we don't retry every render
+        }
+      });
+      if (!cancelled && Object.keys(updates).length) {
+        setAutoPhotos((prev) => {
+          const next = { ...prev, ...updates };
+          savePhotoCache(next);
+          return next;
+        });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [baseScorers, autoPhotos]);
+
+  const scorers = useMemo(
+    () => baseScorers.map((s) => (s.photo ? s : { ...s, photo: autoPhotos[normalize(s.player)] || undefined })),
+    [baseScorers, autoPhotos],
+  );
 
   return <Ctx.Provider value={{ overlay, scorers, updatedAt }}>{children}</Ctx.Provider>;
 }
