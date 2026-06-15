@@ -2,11 +2,21 @@ import { useMemo } from 'react';
 import { matches, type Match } from '../data/matches';
 import { teamById } from '../data/teams';
 import { applyOverlay, useLiveData } from '../context/LiveData';
-import { kickoffUtc, localTime } from '../utils/time';
+import { kickoffUtc, localDateKey, localTime } from '../utils/time';
 import { teamColor } from '../data/colors';
 import Flag from './Flag';
 
 type Row = { m: Match & { live?: boolean }; kickoff: Date };
+
+// "Sun, Jun 14" from a Romania-local date key (YYYY-MM-DD).
+function dayLabel(key: string): string {
+  return new Date(`${key}T12:00:00Z`).toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+}
 
 function MiniMatch({ row, mode }: { row: Row; mode: 'result' | 'fixture' }) {
   const { m } = row;
@@ -104,9 +114,21 @@ export default function OverviewSection() {
 
         <Panel title="Coming up" accent="text-sky-400">
           <div className="space-y-2">
-            {upcoming.map((r) => (
-              <MiniMatch key={r.m.id} row={r} mode="fixture" />
-            ))}
+            {upcoming.map((r, i) => {
+              const key = localDateKey(r.kickoff);
+              const newDay = i === 0 || key !== localDateKey(upcoming[i - 1].kickoff);
+              return (
+                <div key={r.m.id}>
+                  {newDay && (
+                    <div className="mb-2 mt-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      <span>{dayLabel(key)}</span>
+                      <span className="h-px flex-1 bg-slate-700/60" />
+                    </div>
+                  )}
+                  <MiniMatch row={r} mode="fixture" />
+                </div>
+              );
+            })}
           </div>
         </Panel>
       </div>
