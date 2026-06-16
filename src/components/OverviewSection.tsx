@@ -99,7 +99,7 @@ export default function OverviewSection() {
     <section className="space-y-6">
       <div className="grid grid-cols-3 gap-3">
         <Stat value={finished.length} label="Matches played" />
-        <Stat value={goals} label="Goals scored" />
+        <Stat value={goals} label="Total goals" />
         <Stat value={`${finished.length}/104`} label="Of the tournament" />
       </div>
 
