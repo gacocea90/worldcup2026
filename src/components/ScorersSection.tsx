@@ -95,7 +95,8 @@ export default function ScorersSection() {
           🏆 Golden Boot race
         </h2>
         <span className="text-sm text-slate-400">
-          {scorers.reduce((sum, s) => sum + s.goals, 0)} goals scored so far
+          {scorers.reduce((sum, s) => sum + s.goals, 0)} goals scored so far{' '}
+          <span className="text-slate-500">(excluding own goals)</span>
         </span>
       </div>
 
