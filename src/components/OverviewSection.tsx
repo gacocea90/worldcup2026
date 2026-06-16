@@ -84,23 +84,27 @@ export default function OverviewSection() {
     [overlay],
   );
 
-  const finished = rows.filter((r) => r.m.status === 'finished');
-  const latest = [...finished].sort((a, b) => b.kickoff.getTime() - a.kickoff.getTime()).slice(0, 5);
+  // `status === 'finished'` covers both completed and in-progress games (live
+  // games carry a `live` flag so their score shows) — only completed ones count
+  // as "played".
+  const withScores = rows.filter((r) => r.m.status === 'finished');
+  const played = withScores.filter((r) => !r.m.live);
+  const latest = [...played].sort((a, b) => b.kickoff.getTime() - a.kickoff.getTime()).slice(0, 5);
   const upcoming = rows
     .filter((r) => r.m.status === 'upcoming')
     .sort((a, b) => a.kickoff.getTime() - b.kickoff.getTime())
     .slice(0, 5);
 
-  const goals = finished.reduce((sum, r) => sum + (r.m.homeScore ?? 0) + (r.m.awayScore ?? 0), 0);
+  const goals = withScores.reduce((sum, r) => sum + (r.m.homeScore ?? 0) + (r.m.awayScore ?? 0), 0);
   const leader = [...scorers].sort((a, b) => b.goals - a.goals || a.player.localeCompare(b.player))[0];
   const leaderTeam = leader ? teamById(leader.teamId) : undefined;
 
   return (
     <section className="space-y-6">
       <div className="grid grid-cols-3 gap-3">
-        <Stat value={finished.length} label="Matches played" />
+        <Stat value={played.length} label="Matches played" />
         <Stat value={goals} label="Total goals" />
-        <Stat value={`${finished.length}/104`} label="Of the tournament" />
+        <Stat value={`${played.length}/104`} label="Of the tournament" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
