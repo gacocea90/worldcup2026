@@ -155,7 +155,7 @@ function buildScorers(overlay: Map<string, Overlay>): ScorerRow[] {
 
 // --- Auto photos: resolve a player image from Wikipedia for any scorer
 // without a curated photo. Cached in localStorage so each lookup runs once.
-const PHOTO_CACHE_KEY = 'wc-autophotos-v1';
+const PHOTO_CACHE_KEY = 'wc-autophotos-v3';
 
 function loadPhotoCache(): Record<string, string> {
   try {
@@ -178,17 +178,22 @@ async function fetchWikiPhoto(player: string, teamId: string): Promise<string> {
   const search = encodeURIComponent(`${player} ${country} footballer`);
   const url =
     `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*` +
-    `&generator=search&gsrsearch=${search}&gsrlimit=1` +
-    `&prop=pageimages|extracts&piprop=thumbnail&pithumbsize=200&exintro=1&explaintext=1&exsentences=1`;
+    `&generator=search&gsrsearch=${search}&gsrlimit=6` +
+    `&prop=pageimages|extracts|description&piprop=thumbnail&pithumbsize=200&exintro=1&explaintext=1&exsentences=1`;
   const d = await fetch(url).then((r) => r.json());
-  const first: any = Object.values(d?.query?.pages ?? {})[0];
-  const photo: string = first?.thumbnail?.source ?? '';
-  if (!photo) return '';
-  // Only trust the photo if the page's intro confirms the player's nationality —
-  // otherwise a common name can match the wrong (more famous) person.
-  const intro = (first?.extract ?? '').toLowerCase();
-  const ok = intro.includes(country.toLowerCase()) || (demonym(teamId) !== '' && intro.includes(demonym(teamId)));
-  return ok ? photo : '';
+  // The top hit isn't always the right player (e.g. a coach or namesake ranks first),
+  // so scan results in rank order for the first with a photo whose intro or Wikidata
+  // description confirms the player's nationality.
+  const pages: any[] = Object.values(d?.query?.pages ?? {}).sort((a: any, b: any) => (a.index ?? 0) - (b.index ?? 0));
+  const c = country.toLowerCase();
+  const dem = demonym(teamId);
+  for (const p of pages) {
+    const photo: string = p?.thumbnail?.source ?? '';
+    if (!photo) continue;
+    const text = `${p?.extract ?? ''} ${p?.description ?? ''}`.toLowerCase();
+    if (text.includes(c) || (dem !== '' && text.includes(dem))) return photo;
+  }
+  return '';
 }
 
 export function LiveDataProvider({ children }: { children: ReactNode }) {
