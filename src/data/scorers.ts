@@ -33,6 +33,7 @@ export const scorers: Scorer[] = [
   { player: 'Keito Nakamura', teamId: 'JPN', goals: 1, photo: '/players/keito-nakamura.png' },
   { player: 'Daichi Kamada', teamId: 'JPN', goals: 1, photo: '/players/daichi-kamada.jpg' },
   // Sourced from Transfermarkt (not on Wikipedia)
+  { player: 'Maxi Araújo', teamId: 'URU', goals: 1, photo: '/players/maxi-araujo.jpg' },
   { player: 'Maurício', teamId: 'PAR', goals: 1, photo: '/players/mauricio-par.jpg' },
   { player: 'Nathaniel Brown', teamId: 'GER', goals: 1, photo: '/players/nathaniel-brown.jpg' },
   { player: 'Livano Comenencia', teamId: 'CUW', goals: 1, photo: '/players/livano-comenencia.jpg' },
