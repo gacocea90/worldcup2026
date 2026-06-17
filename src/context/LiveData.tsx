@@ -155,7 +155,7 @@ function buildScorers(overlay: Map<string, Overlay>): ScorerRow[] {
 
 // --- Auto photos: resolve a player image from Wikipedia for any scorer
 // without a curated photo. Cached in localStorage so each lookup runs once.
-const PHOTO_CACHE_KEY = 'wc-autophotos-v3';
+const PHOTO_CACHE_KEY = 'wc-autophotos-v4';
 
 function loadPhotoCache(): Record<string, string> {
   try {
@@ -180,7 +180,9 @@ async function fetchWikiPhoto(player: string, teamId: string): Promise<string> {
     `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*` +
     `&generator=search&gsrsearch=${search}&gsrlimit=6` +
     `&prop=pageimages|extracts|description&piprop=thumbnail&pithumbsize=200&exintro=1&explaintext=1&exsentences=1`;
-  const d = await fetch(url).then((r) => r.json());
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`wiki ${r.status}`); // transient (e.g. rate limit) — let caller retry
+  const d = await r.json();
   // The top hit isn't always the right player (e.g. a coach or namesake ranks first),
   // so scan results in rank order for the first with a photo whose intro or Wikidata
   // description confirms the player's nationality.
@@ -233,9 +235,12 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
       const updates: Record<string, string> = {};
       await mapLimit(missing, 3, async (s) => {
         try {
+          // A successful query caches its result — a URL, or '' when no verified
+          // match exists (those players are filled from curated data instead).
           updates[normalize(s.player)] = await fetchWikiPhoto(s.player, s.teamId);
         } catch {
-          updates[normalize(s.player)] = ''; // mark as tried so we don't retry every render
+          // Transient failure (network/rate limit): don't cache, so it retries
+          // on the next poll instead of sticking as a permanent blank.
         }
       });
       if (!cancelled && Object.keys(updates).length) {
