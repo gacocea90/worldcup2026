@@ -160,7 +160,7 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
             {live ? (
               <LiveTick label={match.matchTime || 'LIVE'} />
             ) : (
-              <span>{finished ? 'Full time' : localTime(kickoff)}</span>
+              <span>{finished ? `Full time · KO ${localTime(kickoff)}` : localTime(kickoff)}</span>
             )}
             <span className="truncate">· {match.city}</span>
             {hasDetails && <span className="ml-auto shrink-0">{expanded ? '▲' : '▼'}</span>}
@@ -185,6 +185,9 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
               <span className="text-sm font-semibold text-slate-400">{localTime(kickoff)}</span>
             )}
             {live && <span className="mt-1 flex justify-center"><LiveTick label={match.matchTime || 'LIVE'} /></span>}
+            {finished && !live && (
+              <span className="mt-1 block text-[11px] text-slate-500">KO {localTime(kickoff)}</span>
+            )}
           </div>
           <div className="flex min-w-0 flex-1 items-center gap-2">
             <Flag team={away} className="w-7" />

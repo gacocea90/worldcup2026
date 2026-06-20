@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
-import { groups, teams } from '../data/teams';
+import { groups, teamById, teams } from '../data/teams';
+import { matches } from '../data/matches';
 import { groupStandings, type FormResult } from '../utils/standings';
-import { finishedMerged, useLiveData } from '../context/LiveData';
+import { applyOverlay, finishedMerged, useLiveData } from '../context/LiveData';
+import { kickoffUtc, localDateKey, localTime } from '../utils/time';
 import Flag from './Flag';
 
 const FORM_COLOR: Record<FormResult, string> = { W: 'bg-emerald-500', D: 'bg-slate-500', L: 'bg-red-500' };
@@ -22,6 +24,57 @@ function FormPills({ form }: { form: FormResult[] }) {
   );
 }
 
+function dayShort(key: string): string {
+  return new Date(`${key}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+}
+
+function GroupFixtures({ group, overlay }: { group: string; overlay: ReturnType<typeof useLiveData>['overlay'] }) {
+  const rows = matches
+    .filter((m) => m.group === group)
+    .map((m) => {
+      const merged = applyOverlay(m, overlay);
+      const k = overlay.get(`${m.home}-${m.away}`)?.kickoff;
+      return { m: merged, kickoff: k ? new Date(k) : kickoffUtc(merged) };
+    })
+    .sort((a, b) => a.kickoff.getTime() - b.kickoff.getTime());
+
+  return (
+    <div>
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Matches</p>
+      <div className="divide-y divide-slate-700/40">
+        {rows.map(({ m, kickoff }) => {
+          const home = teamById(m.home);
+          const away = teamById(m.away);
+          const played = m.status === 'finished';
+          const live = (m as { live?: boolean }).live;
+          return (
+            <div key={m.id} className="flex items-center gap-2 py-1.5 text-sm">
+              <span className="w-20 shrink-0 text-xs text-slate-500">
+                {dayShort(localDateKey(kickoff))} · {localTime(kickoff)}
+              </span>
+              <span className="flex min-w-0 flex-1 items-center justify-end gap-1.5 text-right">
+                <span className="truncate">{home.name}</span>
+                <Flag team={home} className="w-4" />
+              </span>
+              <span
+                className={`w-12 shrink-0 text-center font-semibold tabular-nums ${
+                  live ? 'text-red-300' : played ? 'text-emerald-400' : 'text-slate-400'
+                }`}
+              >
+                {played ? `${m.homeScore}–${m.awayScore}` : 'v'}
+              </span>
+              <span className="flex min-w-0 flex-1 items-center gap-1.5">
+                <Flag team={away} className="w-4" />
+                <span className="truncate">{away.name}</span>
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function TeamsSection() {
   const [search, setSearch] = useState('');
   const { overlay } = useLiveData();
@@ -30,16 +83,8 @@ export default function TeamsSection() {
   const visibleGroups = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return groups;
-    return groups.filter((g) =>
-      teams.some(
-        (t) =>
-          t.group === g &&
-          (t.name.toLowerCase().includes(q) || t.keyPlayers.some((p) => p.toLowerCase().includes(q))),
-      ),
-    );
+    return groups.filter((g) => teams.some((t) => t.group === g && t.name.toLowerCase().includes(q)));
   }, [search]);
-
-  const q = search.trim().toLowerCase();
 
   return (
     <section>
@@ -48,7 +93,7 @@ export default function TeamsSection() {
           type="search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search team or player…"
+          placeholder="Search team…"
           className="w-full max-w-sm rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:border-emerald-500 focus:outline-none"
         />
         <div className="flex items-center gap-4 text-xs text-slate-400">
@@ -65,12 +110,12 @@ export default function TeamsSection() {
         {visibleGroups.map((g) => {
           const standings = groupStandings(g, mergedMatches);
           return (
-            <div key={g} className="rounded-2xl border border-slate-700/60 bg-slate-800/40 p-5">
+            <div key={g} className="min-w-0 rounded-2xl border border-slate-700/60 bg-slate-800/40 p-5">
               <h3 className="font-display mb-4 text-2xl font-semibold uppercase tracking-wide">
                 Group <span className="text-emerald-400">{g}</span>
               </h3>
 
-              <table className="mb-4 w-full text-sm">
+              <table className="mb-5 w-full text-sm">
                 <thead>
                   <tr className="text-left text-xs uppercase tracking-wide text-slate-500">
                     <th className="pb-2 pl-1">#</th>
@@ -91,7 +136,7 @@ export default function TeamsSection() {
                       <tr key={row.team.id} className={`border-t border-slate-700/50 ${i < 2 ? 'text-slate-100' : 'text-slate-400'}`}>
                         <td className={`border-l-[3px] py-2 pl-2 text-xs font-semibold text-slate-500 ${band}`}>{i + 1}</td>
                         <td className="py-2">
-                          <span className="flex items-center gap-2">
+                          <span className="flex min-w-0 items-center gap-2">
                             <Flag team={row.team} className="w-5" />
                             <span className="truncate">{row.team.name}</span>
                           </span>
@@ -111,34 +156,7 @@ export default function TeamsSection() {
                 </tbody>
               </table>
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                {teams
-                  .filter((t) => t.group === g)
-                  .filter(
-                    (t) =>
-                      !q ||
-                      t.name.toLowerCase().includes(q) ||
-                      t.keyPlayers.some((p) => p.toLowerCase().includes(q)),
-                  )
-                  .map((t) => (
-                    <div key={t.id} className="rounded-xl bg-slate-800/80 p-3">
-                      <div className="mb-1 flex items-center gap-2">
-                        <Flag team={t} className="w-6" />
-                        <span className="font-semibold">{t.name}</span>
-                        <span className="ml-auto rounded bg-slate-700 px-1.5 py-0.5 text-[10px] font-semibold text-slate-300">
-                          {t.confederation}
-                        </span>
-                      </div>
-                      <ul className="text-xs text-slate-400">
-                        {t.keyPlayers.map((p) => (
-                          <li key={p} className="py-0.5">
-                            ⭐ {p}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-              </div>
+              <GroupFixtures group={g} overlay={overlay} />
             </div>
           );
         })}
