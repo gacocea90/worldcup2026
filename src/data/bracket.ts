@@ -33,7 +33,7 @@ export const bracket: BracketMatch[] = [
   { id: 79, round: 'R32', homeLabel: '1A', awayLabel: '3rd C/E/F/H/I', date: 'Jun 30', venue: 'Estadio Azteca', city: 'Mexico City', homeTeamId: 'MEX' },
   { id: 80, round: 'R32', homeLabel: '1L', awayLabel: '3rd E/H/I/J/K', date: 'Jul 1', venue: 'Mercedes-Benz Stadium', city: 'Atlanta' },
   { id: 86, round: 'R32', homeLabel: '1J', awayLabel: '2H', date: 'Jul 3', venue: 'Hard Rock Stadium', city: 'Miami', awayTeamId: 'CPV' },
-  { id: 88, round: 'R32', homeLabel: '2D', awayLabel: '2G', date: 'Jul 3', venue: 'AT&T Stadium', city: 'Dallas', homeTeamId: 'AUS' },
+  { id: 88, round: 'R32', homeLabel: '2D', awayLabel: '2G', date: 'Jul 3', venue: 'AT&T Stadium', city: 'Dallas', homeTeamId: 'AUS', awayTeamId: 'EGY' },
   { id: 85, round: 'R32', homeLabel: '1B', awayLabel: '3rd E/F/G/I/J', date: 'Jul 2', venue: 'BC Place', city: 'Vancouver', homeTeamId: 'SUI' },
   { id: 87, round: 'R32', homeLabel: '1K', awayLabel: '3rd D/E/I/J/L', date: 'Jul 3', venue: 'Arrowhead Stadium', city: 'Kansas City' },
   // Round of 16
