@@ -156,7 +156,7 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
             ))}
           </div>
           <div className="mt-2 flex items-center gap-2 text-xs text-slate-500">
-            <span className="rounded bg-slate-700/60 px-1.5 py-0.5 font-semibold text-slate-300">Group {match.group}</span>
+            <span className="rounded bg-slate-700/60 px-1.5 py-0.5 font-semibold text-slate-300">{match.round ?? `Group ${match.group}`}</span>
             {live ? (
               <LiveTick label={match.matchTime || 'LIVE'} />
             ) : (
@@ -169,8 +169,8 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
 
         {/* Desktop: teams flanking the score */}
         <div className="hidden items-center gap-3 px-4 py-3 sm:flex">
-          <span className="w-[4.5rem] shrink-0 rounded-md bg-slate-700/60 px-2 py-1 text-center text-xs font-semibold text-slate-300">
-            Group {match.group}
+          <span className="w-[4.5rem] shrink-0 rounded-md bg-slate-700/60 px-2 py-1 text-center text-xs font-semibold leading-tight text-slate-300">
+            {match.round ?? `Group ${match.group}`}
           </span>
           <div className="flex min-w-0 flex-1 items-center justify-end gap-2 text-right">
             <span className="truncate font-medium">{home.name}</span>

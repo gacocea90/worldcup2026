@@ -19,7 +19,8 @@ export interface Match {
   id: number;
   date: string; // ISO date (local venue date)
   time: string; // local kickoff time at the venue
-  group: string;
+  group: string; // group letter for group-stage matches; '' for knockout
+  round?: string; // set for knockout matches, e.g. "Round of 32"
   home: string; // team id
   away: string; // team id
   venue: string;
@@ -1446,6 +1447,26 @@ export const matches: Match[] = [
       { label: 'Yellow cards', home: 3, away: 0 },
     ],
   },
+
+  // ── Round of 32 — June 28 – July 3, 2026 ──
+  // Kickoff times are venue-local; verified against the official FIFA 2026
+  // match schedule (FIFA match numbers 73–88). Teams mirror data/bracket.ts.
+  { id: 73, date: '2026-06-28', time: '12:00 PT', group: '', round: 'Round of 32', home: 'RSA', away: 'CAN', venue: 'SoFi Stadium', city: 'Los Angeles', status: 'upcoming' },
+  { id: 76, date: '2026-06-29', time: '12:00 CDT', group: '', round: 'Round of 32', home: 'BRA', away: 'JPN', venue: 'NRG Stadium', city: 'Houston', status: 'upcoming' },
+  { id: 74, date: '2026-06-29', time: '16:30 ET', group: '', round: 'Round of 32', home: 'GER', away: 'PAR', venue: 'Gillette Stadium', city: 'Boston', status: 'upcoming' },
+  { id: 75, date: '2026-06-29', time: '19:00 CST', group: '', round: 'Round of 32', home: 'NED', away: 'MAR', venue: 'Estadio BBVA', city: 'Monterrey', status: 'upcoming' },
+  { id: 78, date: '2026-06-30', time: '12:00 CDT', group: '', round: 'Round of 32', home: 'CIV', away: 'NOR', venue: 'AT&T Stadium', city: 'Dallas', status: 'upcoming' },
+  { id: 77, date: '2026-06-30', time: '17:00 ET', group: '', round: 'Round of 32', home: 'FRA', away: 'SWE', venue: 'MetLife Stadium', city: 'New York / New Jersey', status: 'upcoming' },
+  { id: 79, date: '2026-06-30', time: '19:00 CST', group: '', round: 'Round of 32', home: 'MEX', away: 'ECU', venue: 'Estadio Azteca', city: 'Mexico City', status: 'upcoming' },
+  { id: 80, date: '2026-07-01', time: '12:00 ET', group: '', round: 'Round of 32', home: 'ENG', away: 'COD', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', status: 'upcoming' },
+  { id: 82, date: '2026-07-01', time: '13:00 PT', group: '', round: 'Round of 32', home: 'BEL', away: 'SEN', venue: 'Lumen Field', city: 'Seattle', status: 'upcoming' },
+  { id: 81, date: '2026-07-01', time: '17:00 PT', group: '', round: 'Round of 32', home: 'USA', away: 'BIH', venue: "Levi's Stadium", city: 'San Francisco Bay Area', status: 'upcoming' },
+  { id: 84, date: '2026-07-02', time: '12:00 PT', group: '', round: 'Round of 32', home: 'ESP', away: 'AUT', venue: 'SoFi Stadium', city: 'Los Angeles', status: 'upcoming' },
+  { id: 83, date: '2026-07-02', time: '19:00 ET', group: '', round: 'Round of 32', home: 'POR', away: 'CRO', venue: 'BMO Field', city: 'Toronto', status: 'upcoming' },
+  { id: 85, date: '2026-07-02', time: '20:00 PT', group: '', round: 'Round of 32', home: 'SUI', away: 'ALG', venue: 'BC Place', city: 'Vancouver', status: 'upcoming' },
+  { id: 88, date: '2026-07-03', time: '12:00 CDT', group: '', round: 'Round of 32', home: 'AUS', away: 'EGY', venue: 'AT&T Stadium', city: 'Dallas', status: 'upcoming' },
+  { id: 86, date: '2026-07-03', time: '18:00 ET', group: '', round: 'Round of 32', home: 'ARG', away: 'CPV', venue: 'Hard Rock Stadium', city: 'Miami', status: 'upcoming' },
+  { id: 87, date: '2026-07-03', time: '20:30 CDT', group: '', round: 'Round of 32', home: 'COL', away: 'GHA', venue: 'Arrowhead Stadium', city: 'Kansas City', status: 'upcoming' },
 ];
 
 export const knockoutRounds = [
