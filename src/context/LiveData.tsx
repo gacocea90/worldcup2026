@@ -27,13 +27,26 @@ export interface ScorerRow {
   photo?: string;
 }
 
+// Live knockout match state from FIFA, keyed by official match number (= bracket id).
+export interface KnockoutInfo {
+  homeId?: string;
+  awayId?: string;
+  homeScore?: number;
+  awayScore?: number;
+  homePen?: number;
+  awayPen?: number;
+  status: ResultStatus;
+  winner?: 'home' | 'away';
+}
+
 interface LiveData {
   overlay: Map<string, Overlay>; // keyed by `${homeId}-${awayId}`
+  knockout: Map<number, KnockoutInfo>; // keyed by FIFA match number
   scorers: ScorerRow[];
   updatedAt: Date | null;
 }
 
-const Ctx = createContext<LiveData>({ overlay: new Map(), scorers: curatedScorers, updatedAt: null });
+const Ctx = createContext<LiveData>({ overlay: new Map(), knockout: new Map(), scorers: curatedScorers, updatedAt: null });
 
 const pairKey = (home: string, away: string) => `${home}-${away}`;
 
@@ -77,16 +90,46 @@ async function fetchGoals(idStage: string, idMatch: string, homeId: string, away
   return goals.sort((a, b) => parseInt(a.minute) - parseInt(b.minute));
 }
 
-async function loadOverlay(): Promise<Map<string, Overlay>> {
+function computeWinner(hs?: number, as?: number, hp?: number, ap?: number): 'home' | 'away' | undefined {
+  if (hs == null || as == null) return undefined;
+  if (hs > as) return 'home';
+  if (hs < as) return 'away';
+  if (hp != null && ap != null) return hp > ap ? 'home' : ap > hp ? 'away' : undefined;
+  return undefined;
+}
+
+async function loadOverlay(): Promise<{ overlay: Map<string, Overlay>; knockout: Map<number, KnockoutInfo> }> {
   const cal = await fetch(
     `${API}/calendar/matches?idCompetition=${COMPETITION}&idSeason=${SEASON}&count=120&language=en`,
   ).then((r) => r.json());
 
   const rows = (cal.Results ?? []) as any[];
   const map = new Map<string, Overlay>();
+  const knockout = new Map<number, KnockoutInfo>();
   const needGoals: { key: string; idStage: string; idMatch: string; homeId: string; awayId: string; live: boolean }[] = [];
 
   for (const m of rows) {
+    // Knockout matches (number 73+) — capture by match number for the bracket,
+    // even before teams are assigned.
+    const mn = m.MatchNumber;
+    if (typeof mn === 'number' && mn >= 73) {
+      const status = statusOf(m.MatchStatus);
+      const hs = m.Home?.Score ?? undefined;
+      const as = m.Away?.Score ?? undefined;
+      const hp = m.HomeTeamPenaltyScore ?? undefined;
+      const ap = m.AwayTeamPenaltyScore ?? undefined;
+      knockout.set(mn, {
+        homeId: m.Home?.Abbreviation ?? undefined,
+        awayId: m.Away?.Abbreviation ?? undefined,
+        homeScore: hs,
+        awayScore: as,
+        homePen: hp,
+        awayPen: ap,
+        status,
+        winner: status === 'finished' ? computeWinner(hs, as, hp, ap) : undefined,
+      });
+    }
+
     const homeId = m.Home?.Abbreviation;
     const awayId = m.Away?.Abbreviation;
     if (!homeId || !awayId) continue;
@@ -124,7 +167,7 @@ async function loadOverlay(): Promise<Map<string, Overlay>> {
     }
   });
 
-  return map;
+  return { overlay: map, knockout };
 }
 
 function buildScorers(overlay: Map<string, Overlay>): ScorerRow[] {
@@ -200,6 +243,7 @@ async function fetchWikiPhoto(player: string, teamId: string): Promise<string> {
 
 export function LiveDataProvider({ children }: { children: ReactNode }) {
   const [overlay, setOverlay] = useState<Map<string, Overlay>>(new Map());
+  const [knockout, setKnockout] = useState<Map<number, KnockoutInfo>>(new Map());
   const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
   const [autoPhotos, setAutoPhotos] = useState<Record<string, string>>(() => loadPhotoCache());
 
@@ -209,7 +253,8 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
       try {
         const next = await loadOverlay();
         if (!cancelled) {
-          setOverlay(next);
+          setOverlay(next.overlay);
+          setKnockout(next.knockout);
           setUpdatedAt(new Date());
         }
       } catch {
@@ -261,7 +306,7 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
     [baseScorers, autoPhotos],
   );
 
-  return <Ctx.Provider value={{ overlay, scorers, updatedAt }}>{children}</Ctx.Provider>;
+  return <Ctx.Provider value={{ overlay, knockout, scorers, updatedAt }}>{children}</Ctx.Provider>;
 }
 
 export const useLiveData = () => useContext(Ctx);

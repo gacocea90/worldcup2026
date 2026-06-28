@@ -1,11 +1,24 @@
 import { bracketById, type BracketMatch } from '../data/bracket';
 import { teamById } from '../data/teams';
+import { useLiveData } from '../context/LiveData';
 import Flag from './Flag';
 
 type Dir = 'right' | 'left';
 const LINE = 'bg-slate-600/70';
 
-function Slot({ teamId, label, score, won }: { teamId?: string; label: string; score?: number; won?: boolean }) {
+function Slot({
+  teamId,
+  label,
+  score,
+  pen,
+  won,
+}: {
+  teamId?: string;
+  label: string;
+  score?: number;
+  pen?: number;
+  won?: boolean;
+}) {
   const team = teamId ? teamById(teamId) : undefined;
   return (
     <div className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs ${won ? 'font-bold text-emerald-300' : 'text-slate-300'}`}>
@@ -17,21 +30,41 @@ function Slot({ teamId, label, score, won }: { teamId?: string; label: string; s
       ) : (
         <span className="italic text-slate-500">{label}</span>
       )}
-      {score !== undefined && <span className="font-display ml-auto font-bold text-slate-100">{score}</span>}
+      {score !== undefined && (
+        <span className="ml-auto flex items-baseline gap-0.5">
+          {pen !== undefined && <span className="text-[9px] text-slate-500">({pen})</span>}
+          <span className="font-display font-bold text-slate-100">{score}</span>
+        </span>
+      )}
     </div>
   );
 }
 
 function BracketCard({ match, highlight = false }: { match: BracketMatch; highlight?: boolean }) {
+  const { knockout } = useLiveData();
+  const live = knockout.get(match.id);
+
+  // Live FIFA data takes precedence over the static seed; teams, scores and
+  // winners fill in automatically as each round is played.
+  const homeTeamId = live?.homeId ?? match.homeTeamId;
+  const awayTeamId = live?.awayId ?? match.awayTeamId;
+  const isLive = live?.status === 'live';
+  const played = live?.status === 'finished' || isLive;
+  const homeScore = played ? live?.homeScore : match.homeScore;
+  const awayScore = played ? live?.awayScore : match.awayScore;
+  const winner = live?.status === 'finished' ? live?.winner : match.winner;
+  // Penalty scores only shown when the match was level after normal/extra time.
+  const showPens = live?.status === 'finished' && live?.homePen != null && live?.awayPen != null && live?.homeScore === live?.awayScore;
+
   return (
     <div className={`w-44 shrink-0 rounded-lg border bg-slate-800/70 ${highlight ? 'border-amber-400/60 shadow-[0_0_18px_rgba(251,191,36,0.18)]' : 'border-slate-700/70'}`}>
       <div className="flex items-center justify-between border-b border-slate-700/60 px-2.5 py-1 text-[10px] text-slate-500">
-        <span>M{match.id} · {match.date}</span>
+        <span className={isLive ? 'font-bold text-red-400' : ''}>{isLive ? '● LIVE' : `M${match.id} · ${match.date}`}</span>
         <span className="truncate pl-1 text-right">{match.city}</span>
       </div>
-      <Slot teamId={match.homeTeamId} label={match.homeLabel} score={match.homeScore} won={match.winner === 'home'} />
+      <Slot teamId={homeTeamId} label={match.homeLabel} score={homeScore} pen={showPens ? live?.homePen : undefined} won={winner === 'home'} />
       <div className="mx-2.5 border-t border-slate-700/40" />
-      <Slot teamId={match.awayTeamId} label={match.awayLabel} score={match.awayScore} won={match.winner === 'away'} />
+      <Slot teamId={awayTeamId} label={match.awayLabel} score={awayScore} pen={showPens ? live?.awayPen : undefined} won={winner === 'away'} />
     </div>
   );
 }
