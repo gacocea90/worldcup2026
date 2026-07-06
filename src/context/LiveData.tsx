@@ -37,6 +37,8 @@ export interface KnockoutInfo {
   awayPen?: number;
   status: ResultStatus;
   winner?: 'home' | 'away';
+  kickoff?: string; // authoritative UTC kickoff (ISO) from FIFA
+  matchTime?: string; // live clock
 }
 
 interface LiveData {
