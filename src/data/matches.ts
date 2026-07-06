@@ -28,6 +28,8 @@ export interface Match {
   status: MatchStatus;
   homeScore?: number;
   awayScore?: number;
+  homePen?: number; // penalty shootout score (knockout matches level after extra time)
+  awayPen?: number;
   events?: MatchEvent[]; // chronological timeline for finished matches
   stats?: StatRow[]; // Flashscore-style stat comparison for finished matches
 }
@@ -1451,22 +1453,135 @@ export const matches: Match[] = [
   // ── Round of 32 — June 28 – July 3, 2026 ──
   // Kickoff times are venue-local; verified against the official FIFA 2026
   // match schedule (FIFA match numbers 73–88). Teams mirror data/bracket.ts.
-  { id: 73, date: '2026-06-28', time: '12:00 PT', group: '', round: 'Round of 32', home: 'RSA', away: 'CAN', venue: 'SoFi Stadium', city: 'Los Angeles', status: 'upcoming' },
-  { id: 76, date: '2026-06-29', time: '12:00 CDT', group: '', round: 'Round of 32', home: 'BRA', away: 'JPN', venue: 'NRG Stadium', city: 'Houston', status: 'upcoming' },
-  { id: 74, date: '2026-06-29', time: '16:30 ET', group: '', round: 'Round of 32', home: 'GER', away: 'PAR', venue: 'Gillette Stadium', city: 'Boston', status: 'upcoming' },
-  { id: 75, date: '2026-06-29', time: '19:00 CST', group: '', round: 'Round of 32', home: 'NED', away: 'MAR', venue: 'Estadio BBVA', city: 'Monterrey', status: 'upcoming' },
-  { id: 78, date: '2026-06-30', time: '12:00 CDT', group: '', round: 'Round of 32', home: 'CIV', away: 'NOR', venue: 'AT&T Stadium', city: 'Dallas', status: 'upcoming' },
-  { id: 77, date: '2026-06-30', time: '17:00 ET', group: '', round: 'Round of 32', home: 'FRA', away: 'SWE', venue: 'MetLife Stadium', city: 'New York / New Jersey', status: 'upcoming' },
-  { id: 79, date: '2026-06-30', time: '19:00 CST', group: '', round: 'Round of 32', home: 'MEX', away: 'ECU', venue: 'Estadio Azteca', city: 'Mexico City', status: 'upcoming' },
-  { id: 80, date: '2026-07-01', time: '12:00 ET', group: '', round: 'Round of 32', home: 'ENG', away: 'COD', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', status: 'upcoming' },
-  { id: 82, date: '2026-07-01', time: '13:00 PT', group: '', round: 'Round of 32', home: 'BEL', away: 'SEN', venue: 'Lumen Field', city: 'Seattle', status: 'upcoming' },
-  { id: 81, date: '2026-07-01', time: '17:00 PT', group: '', round: 'Round of 32', home: 'USA', away: 'BIH', venue: "Levi's Stadium", city: 'San Francisco Bay Area', status: 'upcoming' },
-  { id: 84, date: '2026-07-02', time: '12:00 PT', group: '', round: 'Round of 32', home: 'ESP', away: 'AUT', venue: 'SoFi Stadium', city: 'Los Angeles', status: 'upcoming' },
-  { id: 83, date: '2026-07-02', time: '19:00 ET', group: '', round: 'Round of 32', home: 'POR', away: 'CRO', venue: 'BMO Field', city: 'Toronto', status: 'upcoming' },
-  { id: 85, date: '2026-07-02', time: '20:00 PT', group: '', round: 'Round of 32', home: 'SUI', away: 'ALG', venue: 'BC Place', city: 'Vancouver', status: 'upcoming' },
-  { id: 88, date: '2026-07-03', time: '12:00 CDT', group: '', round: 'Round of 32', home: 'AUS', away: 'EGY', venue: 'AT&T Stadium', city: 'Dallas', status: 'upcoming' },
-  { id: 86, date: '2026-07-03', time: '18:00 ET', group: '', round: 'Round of 32', home: 'ARG', away: 'CPV', venue: 'Hard Rock Stadium', city: 'Miami', status: 'upcoming' },
-  { id: 87, date: '2026-07-03', time: '20:30 CDT', group: '', round: 'Round of 32', home: 'COL', away: 'GHA', venue: 'Arrowhead Stadium', city: 'Kansas City', status: 'upcoming' },
+  {
+    id: 73, date: '2026-06-28', time: '12:00 PT', group: '', round: 'Round of 32', home: 'RSA', away: 'CAN', venue: 'SoFi Stadium', city: 'Los Angeles', status: 'finished', homeScore: 0, awayScore: 1,
+    events: [
+      { minute: "90+2'", type: 'goal', side: 'away', player: 'Stephen Eustáquio' },
+    ],
+  },
+  {
+    id: 76, date: '2026-06-29', time: '12:00 CDT', group: '', round: 'Round of 32', home: 'BRA', away: 'JPN', venue: 'NRG Stadium', city: 'Houston', status: 'finished', homeScore: 2, awayScore: 1,
+    events: [
+      { minute: "29'", type: 'goal', side: 'away', player: 'Kaishu Sano' },
+      { minute: "56'", type: 'goal', side: 'home', player: 'Casemiro' },
+      { minute: "90+5'", type: 'goal', side: 'home', player: 'Gabriel Martinelli' },
+    ],
+  },
+  {
+    id: 74, date: '2026-06-29', time: '16:30 ET', group: '', round: 'Round of 32', home: 'GER', away: 'PAR', venue: 'Gillette Stadium', city: 'Boston', status: 'finished', homeScore: 1, awayScore: 1, homePen: 3, awayPen: 4,
+    events: [
+      { minute: "42'", type: 'goal', side: 'away', player: 'Julio Enciso' },
+      { minute: "54'", type: 'goal', side: 'home', player: 'Kai Havertz' },
+    ],
+  },
+  {
+    id: 75, date: '2026-06-29', time: '19:00 CST', group: '', round: 'Round of 32', home: 'NED', away: 'MAR', venue: 'Estadio BBVA', city: 'Monterrey', status: 'finished', homeScore: 1, awayScore: 1, homePen: 2, awayPen: 3,
+    events: [
+      { minute: "72'", type: 'goal', side: 'home', player: 'Cody Gakpo' },
+      { minute: "90+1'", type: 'goal', side: 'away', player: 'Issa Diop' },
+    ],
+  },
+  {
+    id: 78, date: '2026-06-30', time: '12:00 CDT', group: '', round: 'Round of 32', home: 'CIV', away: 'NOR', venue: 'AT&T Stadium', city: 'Dallas', status: 'finished', homeScore: 1, awayScore: 2,
+    events: [
+      { minute: "39'", type: 'goal', side: 'away', player: 'Antonio Nusa' },
+      { minute: "74'", type: 'goal', side: 'home', player: 'Amad Diallo' },
+      { minute: "86'", type: 'goal', side: 'away', player: 'Erling Haaland' },
+    ],
+  },
+  {
+    id: 77, date: '2026-06-30', time: '17:00 ET', group: '', round: 'Round of 32', home: 'FRA', away: 'SWE', venue: 'MetLife Stadium', city: 'New York / New Jersey', status: 'finished', homeScore: 3, awayScore: 0,
+    events: [
+      { minute: "45'", type: 'goal', side: 'home', player: 'Kylian Mbappé' },
+      { minute: "53'", type: 'goal', side: 'home', player: 'Bradley Barcola' },
+      { minute: "74'", type: 'goal', side: 'home', player: 'Kylian Mbappé' },
+    ],
+  },
+  { id: 79, date: '2026-06-30', time: '19:00 CST', group: '', round: 'Round of 32', home: 'MEX', away: 'ECU', venue: 'Estadio Azteca', city: 'Mexico City', status: 'finished', homeScore: 2, awayScore: 0 },
+  { id: 80, date: '2026-07-01', time: '12:00 ET', group: '', round: 'Round of 32', home: 'ENG', away: 'COD', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', status: 'finished', homeScore: 2, awayScore: 1 },
+  {
+    id: 82, date: '2026-07-01', time: '13:00 PT', group: '', round: 'Round of 32', home: 'BEL', away: 'SEN', venue: 'Lumen Field', city: 'Seattle', status: 'finished', homeScore: 3, awayScore: 2,
+    events: [
+      { minute: "24'", type: 'goal', side: 'away', player: 'Habib Diarra' },
+      { minute: "51'", type: 'goal', side: 'away', player: 'Ismaïla Sarr' },
+      { minute: "86'", type: 'goal', side: 'home', player: 'Romelu Lukaku' },
+      { minute: "89'", type: 'goal', side: 'home', player: 'Youri Tielemans' },
+      { minute: "120+5'", type: 'goal', side: 'home', player: 'Youri Tielemans', note: 'after extra time' },
+    ],
+  },
+  { id: 81, date: '2026-07-01', time: '17:00 PT', group: '', round: 'Round of 32', home: 'USA', away: 'BIH', venue: "Levi's Stadium", city: 'San Francisco Bay Area', status: 'finished', homeScore: 2, awayScore: 0 },
+  { id: 84, date: '2026-07-02', time: '12:00 PT', group: '', round: 'Round of 32', home: 'ESP', away: 'AUT', venue: 'SoFi Stadium', city: 'Los Angeles', status: 'finished', homeScore: 3, awayScore: 0 },
+  { id: 83, date: '2026-07-02', time: '19:00 ET', group: '', round: 'Round of 32', home: 'POR', away: 'CRO', venue: 'BMO Field', city: 'Toronto', status: 'finished', homeScore: 2, awayScore: 1 },
+  {
+    id: 85, date: '2026-07-02', time: '20:00 PT', group: '', round: 'Round of 32', home: 'SUI', away: 'ALG', venue: 'BC Place', city: 'Vancouver', status: 'finished', homeScore: 2, awayScore: 0,
+    events: [
+      { minute: "10'", type: 'goal', side: 'home', player: 'Breel Embolo' },
+      { minute: "46'", type: 'goal', side: 'home', player: 'Dan Ndoye' },
+    ],
+  },
+  {
+    id: 88, date: '2026-07-03', time: '12:00 CDT', group: '', round: 'Round of 32', home: 'AUS', away: 'EGY', venue: 'AT&T Stadium', city: 'Dallas', status: 'finished', homeScore: 1, awayScore: 1, homePen: 2, awayPen: 4,
+    events: [
+      { minute: "13'", type: 'goal', side: 'away', player: 'Emam Ashour' },
+      { minute: "55'", type: 'goal', side: 'home', player: 'Mohamed Hany', note: 'own goal' },
+    ],
+  },
+  {
+    id: 86, date: '2026-07-03', time: '18:00 ET', group: '', round: 'Round of 32', home: 'ARG', away: 'CPV', venue: 'Hard Rock Stadium', city: 'Miami', status: 'finished', homeScore: 3, awayScore: 2,
+    events: [
+      { minute: "29'", type: 'goal', side: 'home', player: 'Lionel Messi' },
+      { minute: "59'", type: 'goal', side: 'away', player: 'Deroy Duarte' },
+      { minute: "92'", type: 'goal', side: 'home', player: 'Lisandro Martínez' },
+      { minute: "103'", type: 'goal', side: 'away', player: 'Sidny Lopes Cabral' },
+      { minute: "111'", type: 'goal', side: 'home', player: 'Diney Borges', note: 'own goal' },
+    ],
+  },
+  {
+    id: 87, date: '2026-07-03', time: '20:30 CDT', group: '', round: 'Round of 32', home: 'COL', away: 'GHA', venue: 'Arrowhead Stadium', city: 'Kansas City', status: 'finished', homeScore: 1, awayScore: 0,
+    events: [
+      { minute: "14'", type: 'goal', side: 'home', player: 'Jhon Arias' },
+    ],
+  },
+
+  // ── Round of 16 — July 4 – 7, 2026 ──
+  // Matchups filled in as Round of 32 winners are decided; FIFA match numbers
+  // 89–94 (95–96 await the July 3 games). Venue-local kickoff times.
+  {
+    id: 90, date: '2026-07-04', time: '12:00 CDT', group: '', round: 'Round of 16', home: 'CAN', away: 'MAR', venue: 'NRG Stadium', city: 'Houston', status: 'finished', homeScore: 0, awayScore: 3,
+    events: [
+      { minute: "50'", type: 'goal', side: 'away', player: 'Azzedine Ounahi' },
+      { minute: "82'", type: 'goal', side: 'away', player: 'Azzedine Ounahi' },
+      { minute: "90+8'", type: 'goal', side: 'away', player: 'Soufiane Rahimi' },
+    ],
+  },
+  {
+    id: 89, date: '2026-07-04', time: '17:00 ET', group: '', round: 'Round of 16', home: 'PAR', away: 'FRA', venue: 'Lincoln Financial Field', city: 'Philadelphia', status: 'finished', homeScore: 0, awayScore: 1,
+    events: [
+      { minute: "70'", type: 'goal', side: 'away', player: 'Kylian Mbappé' },
+    ],
+  },
+  {
+    id: 91, date: '2026-07-05', time: '16:00 ET', group: '', round: 'Round of 16', home: 'BRA', away: 'NOR', venue: 'MetLife Stadium', city: 'New York / New Jersey', status: 'finished', homeScore: 1, awayScore: 2,
+    events: [
+      { minute: "79'", type: 'goal', side: 'away', player: 'Erling Haaland' },
+      { minute: "90'", type: 'goal', side: 'away', player: 'Erling Haaland' },
+      { minute: "90+10'", type: 'goal', side: 'home', player: 'Neymar Jr' },
+    ],
+  },
+  {
+    id: 92, date: '2026-07-05', time: '18:00 CST', group: '', round: 'Round of 16', home: 'MEX', away: 'ENG', venue: 'Estadio Azteca', city: 'Mexico City', status: 'finished', homeScore: 2, awayScore: 3,
+    events: [
+      { minute: "36'", type: 'goal', side: 'away', player: 'Jude Bellingham' },
+      { minute: "38'", type: 'goal', side: 'away', player: 'Jude Bellingham' },
+      { minute: "42'", type: 'goal', side: 'home', player: 'Julián Quiñones' },
+      { minute: "60'", type: 'goal', side: 'away', player: 'Harry Kane' },
+      { minute: "69'", type: 'goal', side: 'home', player: 'Raúl Jiménez' },
+    ],
+  },
+  { id: 93, date: '2026-07-06', time: '14:00 CDT', group: '', round: 'Round of 16', home: 'POR', away: 'ESP', venue: 'AT&T Stadium', city: 'Dallas', status: 'upcoming' },
+  { id: 94, date: '2026-07-06', time: '14:00 PT', group: '', round: 'Round of 16', home: 'USA', away: 'BEL', venue: 'Lumen Field', city: 'Seattle', status: 'upcoming' },
+  { id: 95, date: '2026-07-07', time: '12:00 ET', group: '', round: 'Round of 16', home: 'ARG', away: 'EGY', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', status: 'upcoming' },
+  { id: 96, date: '2026-07-07', time: '13:00 PT', group: '', round: 'Round of 16', home: 'SUI', away: 'COL', venue: 'BC Place', city: 'Vancouver', status: 'upcoming' },
 ];
 
 export const knockoutRounds = [

@@ -52,9 +52,11 @@ function BracketCard({ match, highlight = false }: { match: BracketMatch; highli
   const played = live?.status === 'finished' || isLive;
   const homeScore = played ? live?.homeScore : match.homeScore;
   const awayScore = played ? live?.awayScore : match.awayScore;
+  const homePen = played ? live?.homePen : match.homePen;
+  const awayPen = played ? live?.awayPen : match.awayPen;
   const winner = live?.status === 'finished' ? live?.winner : match.winner;
   // Penalty scores only shown when the match was level after normal/extra time.
-  const showPens = live?.status === 'finished' && live?.homePen != null && live?.awayPen != null && live?.homeScore === live?.awayScore;
+  const showPens = homePen != null && awayPen != null && homeScore === awayScore;
 
   return (
     <div className={`w-44 shrink-0 rounded-lg border bg-slate-800/70 ${highlight ? 'border-amber-400/60 shadow-[0_0_18px_rgba(251,191,36,0.18)]' : 'border-slate-700/70'}`}>
@@ -62,9 +64,9 @@ function BracketCard({ match, highlight = false }: { match: BracketMatch; highli
         <span className={isLive ? 'font-bold text-red-400' : ''}>{isLive ? '● LIVE' : `M${match.id} · ${match.date}`}</span>
         <span className="truncate pl-1 text-right">{match.city}</span>
       </div>
-      <Slot teamId={homeTeamId} label={match.homeLabel} score={homeScore} pen={showPens ? live?.homePen : undefined} won={winner === 'home'} />
+      <Slot teamId={homeTeamId} label={match.homeLabel} score={homeScore} pen={showPens ? homePen : undefined} won={winner === 'home'} />
       <div className="mx-2.5 border-t border-slate-700/40" />
-      <Slot teamId={awayTeamId} label={match.awayLabel} score={awayScore} pen={showPens ? live?.awayPen : undefined} won={winner === 'away'} />
+      <Slot teamId={awayTeamId} label={match.awayLabel} score={awayScore} pen={showPens ? awayPen : undefined} won={winner === 'away'} />
     </div>
   );
 }
