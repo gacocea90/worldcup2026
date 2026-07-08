@@ -1578,10 +1578,40 @@ export const matches: Match[] = [
       { minute: "69'", type: 'goal', side: 'home', player: 'Raúl Jiménez' },
     ],
   },
-  { id: 93, date: '2026-07-06', time: '14:00 CDT', group: '', round: 'Round of 16', home: 'POR', away: 'ESP', venue: 'AT&T Stadium', city: 'Dallas', status: 'upcoming' },
-  { id: 94, date: '2026-07-06', time: '14:00 PT', group: '', round: 'Round of 16', home: 'USA', away: 'BEL', venue: 'Lumen Field', city: 'Seattle', status: 'upcoming' },
-  { id: 95, date: '2026-07-07', time: '12:00 ET', group: '', round: 'Round of 16', home: 'ARG', away: 'EGY', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', status: 'upcoming' },
-  { id: 96, date: '2026-07-07', time: '13:00 PT', group: '', round: 'Round of 16', home: 'SUI', away: 'COL', venue: 'BC Place', city: 'Vancouver', status: 'upcoming' },
+  {
+    id: 93, date: '2026-07-06', time: '14:00 CDT', group: '', round: 'Round of 16', home: 'POR', away: 'ESP', venue: 'AT&T Stadium', city: 'Dallas', status: 'finished', homeScore: 0, awayScore: 1,
+    events: [
+      { minute: "90+1'", type: 'goal', side: 'away', player: 'Mikel Merino' },
+    ],
+  },
+  {
+    id: 94, date: '2026-07-06', time: '14:00 PT', group: '', round: 'Round of 16', home: 'USA', away: 'BEL', venue: 'Lumen Field', city: 'Seattle', status: 'finished', homeScore: 1, awayScore: 4,
+    events: [
+      { minute: "1'", type: 'goal', side: 'away', player: 'Charles De Ketelaere' },
+      { minute: "31'", type: 'goal', side: 'home', player: 'Malik Tillman' },
+      { minute: "33'", type: 'goal', side: 'away', player: 'Charles De Ketelaere' },
+      { minute: "57'", type: 'goal', side: 'away', player: 'Hans Vanaken' },
+      { minute: "90+3'", type: 'goal', side: 'away', player: 'Romelu Lukaku' },
+    ],
+  },
+  {
+    id: 95, date: '2026-07-07', time: '12:00 ET', group: '', round: 'Round of 16', home: 'ARG', away: 'EGY', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', status: 'finished', homeScore: 3, awayScore: 2,
+    events: [
+      { minute: "15'", type: 'goal', side: 'away', player: 'Yasser Ibrahim' },
+      { minute: "67'", type: 'goal', side: 'away', player: 'Mostafa Zico' },
+      { minute: "79'", type: 'goal', side: 'home', player: 'Cristian Romero' },
+      { minute: "83'", type: 'goal', side: 'home', player: 'Lionel Messi' },
+      { minute: "90+2'", type: 'goal', side: 'home', player: 'Enzo Fernández' },
+    ],
+  },
+  { id: 96, date: '2026-07-07', time: '13:00 PT', group: '', round: 'Round of 16', home: 'SUI', away: 'COL', venue: 'BC Place', city: 'Vancouver', status: 'finished', homeScore: 0, awayScore: 0, homePen: 4, awayPen: 3 },
+
+  // ── Quarter-finals — July 9 – 11, 2026 ──
+  // FIFA match numbers 97–100. Venue-local kickoff times (from the FIFA feed).
+  { id: 97, date: '2026-07-09', time: '16:00 ET', group: '', round: 'Quarter-final', home: 'FRA', away: 'MAR', venue: 'Gillette Stadium', city: 'Boston', status: 'upcoming' },
+  { id: 98, date: '2026-07-10', time: '12:00 PT', group: '', round: 'Quarter-final', home: 'ESP', away: 'BEL', venue: 'SoFi Stadium', city: 'Los Angeles', status: 'upcoming' },
+  { id: 99, date: '2026-07-11', time: '17:00 ET', group: '', round: 'Quarter-final', home: 'NOR', away: 'ENG', venue: 'Hard Rock Stadium', city: 'Miami', status: 'upcoming' },
+  { id: 100, date: '2026-07-11', time: '20:00 CDT', group: '', round: 'Quarter-final', home: 'ARG', away: 'SUI', venue: 'Arrowhead Stadium', city: 'Kansas City', status: 'upcoming' },
 ];
 
 export const knockoutRounds = [
