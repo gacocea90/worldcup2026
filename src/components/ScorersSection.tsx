@@ -31,6 +31,7 @@ interface RankedScorer {
   player: string;
   teamId: string;
   goals: number;
+  assists: number;
   photo?: string;
   rank: number;
 }
@@ -75,7 +76,7 @@ export default function ScorersSection() {
   const { scorers, updatedAt } = useLiveData();
   const ranked = useMemo(() => {
     const sorted = [...scorers].sort(
-      (a, b) => b.goals - a.goals || a.player.localeCompare(b.player),
+      (a, b) => b.goals - a.goals || b.assists - a.assists || a.player.localeCompare(b.player),
     );
     let rank = 0;
     let prevGoals = -1;
@@ -110,6 +111,7 @@ export default function ScorersSection() {
               <th className="px-4 py-3">Player</th>
               <th className="px-4 py-3">Team</th>
               <th className="px-4 py-3 text-center">Goals</th>
+              <th className="px-4 py-3 text-center">Assists</th>
             </tr>
           </thead>
           <tbody>
@@ -141,6 +143,9 @@ export default function ScorersSection() {
                   <td className="px-4 py-3 text-center text-lg font-bold text-emerald-400">
                     {s.goals}
                   </td>
+                  <td className="px-4 py-3 text-center font-semibold tabular-nums text-sky-300">
+                    {s.assists || <span className="text-slate-600">–</span>}
+                  </td>
                 </tr>
               );
             })}
@@ -149,8 +154,8 @@ export default function ScorersSection() {
       </div>
 
       <p className="mt-4 text-xs text-slate-500">
-        Updated live from the official FIFA feed{updatedAt && ` · ${updatedAt.toLocaleTimeString()}`}. New scorers
-        appear automatically; curated photos are shown when available.
+        Goals update live from the official FIFA feed{updatedAt && ` · ${updatedAt.toLocaleTimeString()}`}; new scorers
+        appear automatically. Ranked by goals — assists (a curated stat, not carried by the feed) break ties.
       </p>
     </section>
   );

@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { matches as staticMatches, type Match, type MatchEvent } from '../data/matches';
-import { scorers as curatedScorers } from '../data/scorers';
+import { scorers as curatedScorers, assists as curatedAssists } from '../data/scorers';
 import { teamById } from '../data/teams';
 import { demonym } from '../data/demonyms';
 
@@ -24,6 +24,7 @@ export interface ScorerRow {
   player: string;
   teamId: string;
   goals: number;
+  assists: number;
   photo?: string;
 }
 
@@ -48,7 +49,12 @@ interface LiveData {
   updatedAt: Date | null;
 }
 
-const Ctx = createContext<LiveData>({ overlay: new Map(), knockout: new Map(), scorers: curatedScorers, updatedAt: null });
+const Ctx = createContext<LiveData>({
+  overlay: new Map(),
+  knockout: new Map(),
+  scorers: curatedScorers.map((s) => ({ ...s, assists: 0 })),
+  updatedAt: null,
+});
 
 const pairKey = (home: string, away: string) => `${home}-${away}`;
 
@@ -172,6 +178,11 @@ async function loadOverlay(): Promise<{ overlay: Map<string, Overlay>; knockout:
   return { overlay: map, knockout };
 }
 
+// Assist totals keyed by normalized player name + team (the feed carries no
+// assist data, so these come from the curated list in data/scorers.ts).
+const assistMap = new Map(curatedAssists.map((a) => [normalize(a.player) + a.teamId, a.assists]));
+const assistsFor = (player: string, teamId: string) => assistMap.get(normalize(player) + teamId) ?? 0;
+
 function buildScorers(overlay: Map<string, Overlay>): ScorerRow[] {
   // Photo + nicely-formatted name from the curated list, matched by normalized name.
   const curated = new Map(curatedScorers.map((s) => [normalize(s.player), s]));
@@ -184,17 +195,20 @@ function buildScorers(overlay: Map<string, Overlay>): ScorerRow[] {
       const key = norm + g.teamId;
       const existing = tally.get(key);
       if (existing) existing.goals += 1;
-      else
+      else {
+        const player = nice?.player ?? titleCase(g.player);
         tally.set(key, {
-          player: nice?.player ?? titleCase(g.player),
+          player,
           teamId: g.teamId,
           goals: 1,
+          assists: assistsFor(player, g.teamId),
           photo: nice?.photo,
         });
+      }
     }
   }
   // Fall back to the curated list until the API has reported any goals.
-  if (tally.size === 0) return curatedScorers;
+  if (tally.size === 0) return curatedScorers.map((s) => ({ ...s, assists: assistsFor(s.player, s.teamId) }));
   return [...tally.values()];
 }
 

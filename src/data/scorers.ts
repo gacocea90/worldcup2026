@@ -40,3 +40,40 @@ export const scorers: Scorer[] = [
   { player: 'Livano Comenencia', teamId: 'CUW', goals: 1, photo: '/players/livano-comenencia.jpg' },
   { player: 'Omar Rekik', teamId: 'TUN', goals: 1, photo: '/players/omar-rekik.jpg' },
 ];
+
+export interface Assister {
+  player: string;
+  teamId: string;
+  assists: number;
+}
+
+// Tournament assist leaders (the FIFA feed carries no assist data, so this is
+// curated from the official FIFA / Fox Sports stat pages). Matched onto the
+// goalscorer table by player name + team; goals remain the primary ranking.
+export const assists: Assister[] = [
+  { player: 'Michael Olise', teamId: 'FRA', assists: 5 },
+  { player: 'Bruno Guimarães', teamId: 'BRA', assists: 4 },
+  { player: 'Brahim Díaz', teamId: 'MAR', assists: 4 },
+  { player: 'Alexander Isak', teamId: 'SWE', assists: 3 },
+  { player: 'Leandro Trossard', teamId: 'BEL', assists: 3 },
+  { player: 'Martin Ødegaard', teamId: 'NOR', assists: 3 },
+  { player: 'Bukayo Saka', teamId: 'ENG', assists: 3 },
+  { player: 'Andreas Schjelderup', teamId: 'NOR', assists: 3 },
+  { player: 'Florian Wirtz', teamId: 'GER', assists: 3 },
+  { player: 'Roberto Alvarado', teamId: 'MEX', assists: 3 },
+  { player: 'Hannibal Mejbri', teamId: 'TUN', assists: 2 },
+  { player: 'Chris Wood', teamId: 'NZL', assists: 2 },
+  { player: 'Julio Enciso', teamId: 'PAR', assists: 2 },
+  { player: 'Crysencio Summerville', teamId: 'NED', assists: 2 },
+  { player: 'Marc Cucurella', teamId: 'ESP', assists: 2 },
+  { player: 'Anthony Gordon', teamId: 'ENG', assists: 2 },
+  { player: 'Mohamed Salah', teamId: 'EGY', assists: 2 },
+  { player: 'Ryan Gravenberch', teamId: 'NED', assists: 2 },
+  { player: 'Iliman Ndiaye', teamId: 'SEN', assists: 2 },
+  { player: 'Patrick Berg', teamId: 'NOR', assists: 2 },
+  { player: 'Kylian Mbappé', teamId: 'FRA', assists: 2 },
+  { player: 'Houssem Aouar', teamId: 'ALG', assists: 2 },
+  { player: 'Breel Embolo', teamId: 'SUI', assists: 2 },
+  { player: 'Johan Manzambi', teamId: 'SUI', assists: 2 },
+  { player: 'Denzel Dumfries', teamId: 'NED', assists: 2 },
+];

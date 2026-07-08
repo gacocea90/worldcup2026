@@ -42,8 +42,14 @@ function MiniMatch({ row, mode }: { row: Row; mode: 'result' | 'fixture' }) {
         </div>
         {mode === 'result' ? (
           <div className={`font-display flex flex-col items-end text-lg font-bold tabular-nums ${m.live ? 'text-red-300' : 'text-emerald-400'}`}>
-            <span>{m.homeScore}</span>
-            <span>{m.awayScore}</span>
+            <span>
+              {m.homeScore}
+              {m.homePen != null && m.awayPen != null && <span className="ml-1 text-xs text-slate-400">({m.homePen})</span>}
+            </span>
+            <span>
+              {m.awayScore}
+              {m.homePen != null && m.awayPen != null && <span className="ml-1 text-xs text-slate-400">({m.awayPen})</span>}
+            </span>
           </div>
         ) : (
           <span className="font-display shrink-0 text-sm font-semibold text-slate-400">{localTime(row.kickoff)}</span>
