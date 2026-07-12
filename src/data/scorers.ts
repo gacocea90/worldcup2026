@@ -47,33 +47,50 @@ export interface Assister {
   assists: number;
 }
 
-// Tournament assist leaders (the FIFA feed carries no assist data, so this is
-// curated from the official FIFA / Fox Sports stat pages). Matched onto the
-// goalscorer table by player name + team; goals remain the primary ranking.
+// Per-player assist totals (the FIFA feed carries no assist data, so these are
+// curated from the official FIFA / Fox Sports player-stats pages, current after
+// the quarter-finals). Matched onto the goalscorer table by player name + team;
+// goals stay the primary ranking, assists break ties and fill the column. The
+// first block covers players who have scored (so they appear in the table); the
+// rest are pure assist providers, kept for completeness.
 export const assists: Assister[] = [
-  { player: 'Michael Olise', teamId: 'FRA', assists: 5 },
-  { player: 'Bruno Guimarães', teamId: 'BRA', assists: 4 },
-  { player: 'Brahim Díaz', teamId: 'MAR', assists: 4 },
+  // Goalscorers with assists (shown in the Top Scorers table)
+  { player: 'Kylian Mbappé', teamId: 'FRA', assists: 3 },
+  { player: 'Lionel Messi', teamId: 'ARG', assists: 2 },
+  { player: 'Ousmane Dembélé', teamId: 'FRA', assists: 2 },
+  { player: 'Harry Kane', teamId: 'ENG', assists: 1 },
+  { player: 'Jude Bellingham', teamId: 'ENG', assists: 1 },
+  { player: 'Ismaïla Sarr', teamId: 'SEN', assists: 1 },
+  { player: 'Mikel Oyarzabal', teamId: 'ESP', assists: 1 },
+  { player: 'Vinícius Júnior', teamId: 'BRA', assists: 1 },
+  { player: 'Julián Quiñones', teamId: 'MEX', assists: 1 },
+  { player: 'Cody Gakpo', teamId: 'NED', assists: 1 },
+  { player: 'Charles De Ketelaere', teamId: 'BEL', assists: 1 },
+  { player: 'Romelu Lukaku', teamId: 'BEL', assists: 1 },
+  { player: 'Deniz Undav', teamId: 'GER', assists: 2 },
+  { player: 'Johan Manzambi', teamId: 'SUI', assists: 2 },
   { player: 'Alexander Isak', teamId: 'SWE', assists: 3 },
   { player: 'Leandro Trossard', teamId: 'BEL', assists: 3 },
-  { player: 'Martin Ødegaard', teamId: 'NOR', assists: 3 },
-  { player: 'Bukayo Saka', teamId: 'ENG', assists: 3 },
   { player: 'Andreas Schjelderup', teamId: 'NOR', assists: 3 },
+  { player: 'Julio Enciso', teamId: 'PAR', assists: 2 },
+  { player: 'Crysencio Summerville', teamId: 'NED', assists: 2 },
+  { player: 'Mohamed Salah', teamId: 'EGY', assists: 2 },
+  { player: 'Iliman Ndiaye', teamId: 'SEN', assists: 2 },
+  { player: 'Breel Embolo', teamId: 'SUI', assists: 2 },
+  // Pure assist providers (no goals yet — not shown, kept for completeness)
+  { player: 'Michael Olise', teamId: 'FRA', assists: 5 },
+  { player: 'Bruno Guimarães', teamId: 'BRA', assists: 4 },
+  { player: 'Martin Ødegaard', teamId: 'NOR', assists: 4 },
+  { player: 'Brahim Díaz', teamId: 'MAR', assists: 4 },
+  { player: 'Anthony Gordon', teamId: 'ENG', assists: 3 },
+  { player: 'Bukayo Saka', teamId: 'ENG', assists: 3 },
   { player: 'Florian Wirtz', teamId: 'GER', assists: 3 },
   { player: 'Roberto Alvarado', teamId: 'MEX', assists: 3 },
   { player: 'Hannibal Mejbri', teamId: 'TUN', assists: 2 },
   { player: 'Chris Wood', teamId: 'NZL', assists: 2 },
-  { player: 'Julio Enciso', teamId: 'PAR', assists: 2 },
-  { player: 'Crysencio Summerville', teamId: 'NED', assists: 2 },
   { player: 'Marc Cucurella', teamId: 'ESP', assists: 2 },
-  { player: 'Anthony Gordon', teamId: 'ENG', assists: 2 },
-  { player: 'Mohamed Salah', teamId: 'EGY', assists: 2 },
   { player: 'Ryan Gravenberch', teamId: 'NED', assists: 2 },
-  { player: 'Iliman Ndiaye', teamId: 'SEN', assists: 2 },
   { player: 'Patrick Berg', teamId: 'NOR', assists: 2 },
-  { player: 'Kylian Mbappé', teamId: 'FRA', assists: 2 },
   { player: 'Houssem Aouar', teamId: 'ALG', assists: 2 },
-  { player: 'Breel Embolo', teamId: 'SUI', assists: 2 },
-  { player: 'Johan Manzambi', teamId: 'SUI', assists: 2 },
   { player: 'Denzel Dumfries', teamId: 'NED', assists: 2 },
 ];
