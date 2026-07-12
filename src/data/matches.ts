@@ -1608,10 +1608,43 @@ export const matches: Match[] = [
 
   // ── Quarter-finals — July 9 – 11, 2026 ──
   // FIFA match numbers 97–100. Venue-local kickoff times (from the FIFA feed).
-  { id: 97, date: '2026-07-09', time: '16:00 ET', group: '', round: 'Quarter-final', home: 'FRA', away: 'MAR', venue: 'Gillette Stadium', city: 'Boston', status: 'upcoming' },
-  { id: 98, date: '2026-07-10', time: '12:00 PT', group: '', round: 'Quarter-final', home: 'ESP', away: 'BEL', venue: 'SoFi Stadium', city: 'Los Angeles', status: 'upcoming' },
-  { id: 99, date: '2026-07-11', time: '17:00 ET', group: '', round: 'Quarter-final', home: 'NOR', away: 'ENG', venue: 'Hard Rock Stadium', city: 'Miami', status: 'upcoming' },
-  { id: 100, date: '2026-07-11', time: '20:00 CDT', group: '', round: 'Quarter-final', home: 'ARG', away: 'SUI', venue: 'Arrowhead Stadium', city: 'Kansas City', status: 'upcoming' },
+  {
+    id: 97, date: '2026-07-09', time: '16:00 ET', group: '', round: 'Quarter-final', home: 'FRA', away: 'MAR', venue: 'Gillette Stadium', city: 'Boston', status: 'finished', homeScore: 2, awayScore: 0,
+    events: [
+      { minute: "60'", type: 'goal', side: 'home', player: 'Kylian Mbappé' },
+      { minute: "66'", type: 'goal', side: 'home', player: 'Ousmane Dembélé' },
+    ],
+  },
+  {
+    id: 98, date: '2026-07-10', time: '12:00 PT', group: '', round: 'Quarter-final', home: 'ESP', away: 'BEL', venue: 'SoFi Stadium', city: 'Los Angeles', status: 'finished', homeScore: 2, awayScore: 1,
+    events: [
+      { minute: "30'", type: 'goal', side: 'home', player: 'Fabián Ruiz' },
+      { minute: "41'", type: 'goal', side: 'away', player: 'Charles De Ketelaere' },
+      { minute: "88'", type: 'goal', side: 'home', player: 'Mikel Merino' },
+    ],
+  },
+  {
+    id: 99, date: '2026-07-11', time: '17:00 ET', group: '', round: 'Quarter-final', home: 'NOR', away: 'ENG', venue: 'Hard Rock Stadium', city: 'Miami', status: 'finished', homeScore: 1, awayScore: 2,
+    events: [
+      { minute: "36'", type: 'goal', side: 'home', player: 'Andreas Schjelderup' },
+      { minute: "45+2'", type: 'goal', side: 'away', player: 'Jude Bellingham' },
+      { minute: "93'", type: 'goal', side: 'away', player: 'Jude Bellingham' },
+    ],
+  },
+  {
+    id: 100, date: '2026-07-11', time: '20:00 CDT', group: '', round: 'Quarter-final', home: 'ARG', away: 'SUI', venue: 'Arrowhead Stadium', city: 'Kansas City', status: 'finished', homeScore: 3, awayScore: 1,
+    events: [
+      { minute: "10'", type: 'goal', side: 'home', player: 'Alexis Mac Allister' },
+      { minute: "67'", type: 'goal', side: 'away', player: 'Dan Ndoye' },
+      { minute: "112'", type: 'goal', side: 'home', player: 'Julián Álvarez' },
+      { minute: "120+1'", type: 'goal', side: 'home', player: 'Lautaro Martínez' },
+    ],
+  },
+
+  // ── Semi-finals — July 14 – 15, 2026 ──
+  // FIFA match numbers 101–102. Venue-local kickoff times (from the FIFA feed).
+  { id: 101, date: '2026-07-14', time: '14:00 CDT', group: '', round: 'Semi-final', home: 'FRA', away: 'ESP', venue: 'AT&T Stadium', city: 'Dallas', status: 'upcoming' },
+  { id: 102, date: '2026-07-15', time: '15:00 ET', group: '', round: 'Semi-final', home: 'ENG', away: 'ARG', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', status: 'upcoming' },
 ];
 
 export const knockoutRounds = [

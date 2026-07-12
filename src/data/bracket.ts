@@ -48,13 +48,13 @@ export const bracket: BracketMatch[] = [
   { id: 95, round: 'R16', homeLabel: 'W86', awayLabel: 'W88', date: 'Jul 7', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', homeTeamId: 'ARG', awayTeamId: 'EGY', homeScore: 3, awayScore: 2, winner: 'home' },
   { id: 96, round: 'R16', homeLabel: 'W85', awayLabel: 'W87', date: 'Jul 7', venue: 'BC Place', city: 'Vancouver', homeTeamId: 'SUI', awayTeamId: 'COL', homeScore: 0, awayScore: 0, homePen: 4, awayPen: 3, winner: 'home' },
   // Quarter-finals
-  { id: 97, round: 'QF', homeLabel: 'W89', awayLabel: 'W90', date: 'Jul 9', venue: 'Gillette Stadium', city: 'Boston', homeTeamId: 'FRA', awayTeamId: 'MAR' },
-  { id: 98, round: 'QF', homeLabel: 'W93', awayLabel: 'W94', date: 'Jul 10', venue: 'SoFi Stadium', city: 'Los Angeles', homeTeamId: 'ESP', awayTeamId: 'BEL' },
-  { id: 99, round: 'QF', homeLabel: 'W91', awayLabel: 'W92', date: 'Jul 11', venue: 'Hard Rock Stadium', city: 'Miami', homeTeamId: 'NOR', awayTeamId: 'ENG' },
-  { id: 100, round: 'QF', homeLabel: 'W95', awayLabel: 'W96', date: 'Jul 11', venue: 'Arrowhead Stadium', city: 'Kansas City', homeTeamId: 'ARG', awayTeamId: 'SUI' },
+  { id: 97, round: 'QF', homeLabel: 'W89', awayLabel: 'W90', date: 'Jul 9', venue: 'Gillette Stadium', city: 'Boston', homeTeamId: 'FRA', awayTeamId: 'MAR', homeScore: 2, awayScore: 0, winner: 'home' },
+  { id: 98, round: 'QF', homeLabel: 'W93', awayLabel: 'W94', date: 'Jul 10', venue: 'SoFi Stadium', city: 'Los Angeles', homeTeamId: 'ESP', awayTeamId: 'BEL', homeScore: 2, awayScore: 1, winner: 'home' },
+  { id: 99, round: 'QF', homeLabel: 'W91', awayLabel: 'W92', date: 'Jul 11', venue: 'Hard Rock Stadium', city: 'Miami', homeTeamId: 'NOR', awayTeamId: 'ENG', homeScore: 1, awayScore: 2, winner: 'away' },
+  { id: 100, round: 'QF', homeLabel: 'W95', awayLabel: 'W96', date: 'Jul 11', venue: 'Arrowhead Stadium', city: 'Kansas City', homeTeamId: 'ARG', awayTeamId: 'SUI', homeScore: 3, awayScore: 1, winner: 'home' },
   // Semi-finals
-  { id: 101, round: 'SF', homeLabel: 'W97', awayLabel: 'W98', date: 'Jul 14', venue: 'AT&T Stadium', city: 'Dallas' },
-  { id: 102, round: 'SF', homeLabel: 'W99', awayLabel: 'W100', date: 'Jul 15', venue: 'Mercedes-Benz Stadium', city: 'Atlanta' },
+  { id: 101, round: 'SF', homeLabel: 'W97', awayLabel: 'W98', date: 'Jul 14', venue: 'AT&T Stadium', city: 'Dallas', homeTeamId: 'FRA', awayTeamId: 'ESP' },
+  { id: 102, round: 'SF', homeLabel: 'W99', awayLabel: 'W100', date: 'Jul 15', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', homeTeamId: 'ENG', awayTeamId: 'ARG' },
   // Third place & Final
   { id: 103, round: '3RD', homeLabel: 'L101', awayLabel: 'L102', date: 'Jul 18', venue: 'Hard Rock Stadium', city: 'Miami' },
   { id: 104, round: 'F', homeLabel: 'W101', awayLabel: 'W102', date: 'Jul 19', venue: 'MetLife Stadium', city: 'New York / NJ' },
