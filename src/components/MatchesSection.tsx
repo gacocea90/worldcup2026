@@ -122,6 +122,13 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
   const live = Boolean(match.live);
   const finished = match.status === 'finished';
   const hasPens = match.homePen != null && match.awayPen != null;
+  const decided: 'pen' | 'aet' | null = hasPens ? 'pen' : match.aet ? 'aet' : null;
+  // Main score is the 90' score; the deciding result (shootout, or the
+  // extra-time final) is shown in parentheses beside each side.
+  const homeMain = match.aet ? match.homeScore90 : match.homeScore;
+  const awayMain = match.aet ? match.awayScore90 : match.awayScore;
+  const homeExtra = match.aet ? match.homeScore : match.homePen;
+  const awayExtra = match.aet ? match.awayScore : match.awayPen;
   const hasDetails = finished && Boolean(match.events?.length || match.stats?.length);
   const scoreColor = live ? 'text-red-300' : 'text-emerald-400';
 
@@ -150,9 +157,9 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
                 <span className="min-w-0 flex-1 truncate font-medium">{team.name}</span>
                 {finished && (
                   <span className={`font-display shrink-0 text-xl font-bold tabular-nums ${scoreColor}`}>
-                    {side === 'home' ? match.homeScore : match.awayScore}
-                    {hasPens && (
-                      <span className="ml-1 text-xs opacity-70">({side === 'home' ? match.homePen : match.awayPen})</span>
+                    {side === 'home' ? homeMain : awayMain}
+                    {decided && (
+                      <span className="ml-1 text-xs opacity-70">({side === 'home' ? homeExtra : awayExtra})</span>
                     )}
                   </span>
                 )}
@@ -164,7 +171,7 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
             {live ? (
               <LiveTick label={match.matchTime || 'LIVE'} />
             ) : (
-              <span>{finished ? `Full time · KO ${localTime(kickoff)}` : localTime(kickoff)}</span>
+              <span>{finished ? `Full time${decided ? ` · ${decided === 'pen' ? 'pens' : 'AET'}` : ''} · KO ${localTime(kickoff)}` : localTime(kickoff)}</span>
             )}
             <span className="truncate">· {match.city}</span>
             {hasDetails && <span className="ml-auto shrink-0">{expanded ? '▲' : '▼'}</span>}
@@ -180,19 +187,24 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
             <span className="truncate font-medium">{home.name}</span>
             <Flag team={home} className="w-7" />
           </div>
-          <div className={`shrink-0 text-center ${hasPens ? 'w-28' : 'w-20'}`}>
+          <div className={`shrink-0 text-center ${decided ? 'w-28' : 'w-20'}`}>
             {finished ? (
               <span className={`font-display rounded-lg px-3 py-1 text-xl font-bold tabular-nums ${live ? 'bg-red-500/15 text-red-300' : 'bg-emerald-500/15 text-emerald-400'}`}>
-                {match.homeScore}
-                {hasPens && <span className="text-xs opacity-70">&#8202;({match.homePen})</span>} – {match.awayScore}
-                {hasPens && <span className="text-xs opacity-70">&#8202;({match.awayPen})</span>}
+                {homeMain}
+                {decided && <span className="text-xs opacity-70">&#8202;({homeExtra})</span>} – {awayMain}
+                {decided && <span className="text-xs opacity-70">&#8202;({awayExtra})</span>}
               </span>
             ) : (
               <span className="text-sm font-semibold text-slate-400">{localTime(kickoff)}</span>
             )}
             {live && <span className="mt-1 flex justify-center"><LiveTick label={match.matchTime || 'LIVE'} /></span>}
+            {finished && !live && decided && (
+              <span className="mt-1 block text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+                {decided === 'pen' ? 'pens' : 'AET'}
+              </span>
+            )}
             {finished && !live && (
-              <span className="mt-1 block text-[11px] text-slate-500">KO {localTime(kickoff)}</span>
+              <span className="mt-0.5 block text-[11px] text-slate-500">KO {localTime(kickoff)}</span>
             )}
           </div>
           <div className="flex min-w-0 flex-1 items-center gap-2">

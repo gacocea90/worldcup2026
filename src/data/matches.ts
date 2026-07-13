@@ -26,10 +26,13 @@ export interface Match {
   venue: string;
   city: string;
   status: MatchStatus;
-  homeScore?: number;
+  homeScore?: number; // final score (after extra time when aet is set)
   awayScore?: number;
   homePen?: number; // penalty shootout score (knockout matches level after extra time)
   awayPen?: number;
+  aet?: boolean; // decided in extra time (no shootout)
+  homeScore90?: number; // score at the end of 90' — shown as the main score for aet games
+  awayScore90?: number;
   events?: MatchEvent[]; // chronological timeline for finished matches
   stats?: StatRow[]; // Flashscore-style stat comparison for finished matches
 }
@@ -1500,7 +1503,7 @@ export const matches: Match[] = [
   { id: 79, date: '2026-06-30', time: '19:00 CST', group: '', round: 'Round of 32', home: 'MEX', away: 'ECU', venue: 'Estadio Azteca', city: 'Mexico City', status: 'finished', homeScore: 2, awayScore: 0 },
   { id: 80, date: '2026-07-01', time: '12:00 ET', group: '', round: 'Round of 32', home: 'ENG', away: 'COD', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', status: 'finished', homeScore: 2, awayScore: 1 },
   {
-    id: 82, date: '2026-07-01', time: '13:00 PT', group: '', round: 'Round of 32', home: 'BEL', away: 'SEN', venue: 'Lumen Field', city: 'Seattle', status: 'finished', homeScore: 3, awayScore: 2,
+    id: 82, date: '2026-07-01', time: '13:00 PT', group: '', round: 'Round of 32', home: 'BEL', away: 'SEN', venue: 'Lumen Field', city: 'Seattle', status: 'finished', homeScore: 3, awayScore: 2, aet: true, homeScore90: 2, awayScore90: 2,
     events: [
       { minute: "24'", type: 'goal', side: 'away', player: 'Habib Diarra' },
       { minute: "51'", type: 'goal', side: 'away', player: 'Ismaïla Sarr' },
@@ -1527,7 +1530,7 @@ export const matches: Match[] = [
     ],
   },
   {
-    id: 86, date: '2026-07-03', time: '18:00 ET', group: '', round: 'Round of 32', home: 'ARG', away: 'CPV', venue: 'Hard Rock Stadium', city: 'Miami', status: 'finished', homeScore: 3, awayScore: 2,
+    id: 86, date: '2026-07-03', time: '18:00 ET', group: '', round: 'Round of 32', home: 'ARG', away: 'CPV', venue: 'Hard Rock Stadium', city: 'Miami', status: 'finished', homeScore: 3, awayScore: 2, aet: true, homeScore90: 1, awayScore90: 1,
     events: [
       { minute: "29'", type: 'goal', side: 'home', player: 'Lionel Messi' },
       { minute: "59'", type: 'goal', side: 'away', player: 'Deroy Duarte' },
@@ -1624,7 +1627,7 @@ export const matches: Match[] = [
     ],
   },
   {
-    id: 99, date: '2026-07-11', time: '17:00 ET', group: '', round: 'Quarter-final', home: 'NOR', away: 'ENG', venue: 'Hard Rock Stadium', city: 'Miami', status: 'finished', homeScore: 1, awayScore: 2,
+    id: 99, date: '2026-07-11', time: '17:00 ET', group: '', round: 'Quarter-final', home: 'NOR', away: 'ENG', venue: 'Hard Rock Stadium', city: 'Miami', status: 'finished', homeScore: 1, awayScore: 2, aet: true, homeScore90: 1, awayScore90: 1,
     events: [
       { minute: "36'", type: 'goal', side: 'home', player: 'Andreas Schjelderup' },
       { minute: "45+2'", type: 'goal', side: 'away', player: 'Jude Bellingham' },
@@ -1632,7 +1635,7 @@ export const matches: Match[] = [
     ],
   },
   {
-    id: 100, date: '2026-07-11', time: '20:00 CDT', group: '', round: 'Quarter-final', home: 'ARG', away: 'SUI', venue: 'Arrowhead Stadium', city: 'Kansas City', status: 'finished', homeScore: 3, awayScore: 1,
+    id: 100, date: '2026-07-11', time: '20:00 CDT', group: '', round: 'Quarter-final', home: 'ARG', away: 'SUI', venue: 'Arrowhead Stadium', city: 'Kansas City', status: 'finished', homeScore: 3, awayScore: 1, aet: true, homeScore90: 1, awayScore90: 1,
     events: [
       { minute: "10'", type: 'goal', side: 'home', player: 'Alexis Mac Allister' },
       { minute: "67'", type: 'goal', side: 'away', player: 'Dan Ndoye' },

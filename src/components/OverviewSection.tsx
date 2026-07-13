@@ -22,6 +22,14 @@ function MiniMatch({ row, mode }: { row: Row; mode: 'result' | 'fixture' }) {
   const { m } = row;
   const home = teamById(m.home);
   const away = teamById(m.away);
+  // Show the 90' score as the main number; the shootout / extra-time result
+  // goes in parentheses beside each side, tagged "pens" or "AET".
+  const hasPens = m.homePen != null && m.awayPen != null;
+  const decided: 'pen' | 'aet' | null = hasPens ? 'pen' : m.aet ? 'aet' : null;
+  const homeMain = m.aet ? m.homeScore90 : m.homeScore;
+  const awayMain = m.aet ? m.awayScore90 : m.awayScore;
+  const homeExtra = m.aet ? m.homeScore : m.homePen;
+  const awayExtra = m.aet ? m.awayScore : m.awayPen;
   return (
     <div className="relative overflow-hidden rounded-lg border border-slate-700/60 bg-slate-800/60 px-3 py-2 transition hover:border-emerald-500/40">
       <div
@@ -43,13 +51,18 @@ function MiniMatch({ row, mode }: { row: Row; mode: 'result' | 'fixture' }) {
         {mode === 'result' ? (
           <div className={`font-display flex flex-col items-end text-lg font-bold tabular-nums ${m.live ? 'text-red-300' : 'text-emerald-400'}`}>
             <span>
-              {m.homeScore}
-              {m.homePen != null && m.awayPen != null && <span className="ml-1 text-xs text-slate-400">({m.homePen})</span>}
+              {homeMain}
+              {decided && <span className="ml-1 text-xs text-slate-400">({homeExtra})</span>}
             </span>
             <span>
-              {m.awayScore}
-              {m.homePen != null && m.awayPen != null && <span className="ml-1 text-xs text-slate-400">({m.awayPen})</span>}
+              {awayMain}
+              {decided && <span className="ml-1 text-xs text-slate-400">({awayExtra})</span>}
             </span>
+            {decided && (
+              <span className="text-[9px] font-semibold uppercase tracking-wide text-slate-500">
+                {decided === 'pen' ? 'pens' : 'AET'}
+              </span>
+            )}
           </div>
         ) : (
           <span className="font-display shrink-0 text-sm font-semibold text-slate-400">{localTime(row.kickoff)}</span>
