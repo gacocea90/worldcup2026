@@ -52,14 +52,14 @@ function MiniMatch({ row, mode }: { row: Row; mode: 'result' | 'fixture' }) {
           <div className={`font-display flex flex-col items-end text-lg font-bold tabular-nums ${m.live ? 'text-red-300' : 'text-emerald-400'}`}>
             <span>
               {homeMain}
-              {decided && <span className="ml-1 text-xs text-slate-400">({homeExtra})</span>}
+              {decided && <span className="ml-1 text-sm font-bold text-amber-300">({homeExtra})</span>}
             </span>
             <span>
               {awayMain}
-              {decided && <span className="ml-1 text-xs text-slate-400">({awayExtra})</span>}
+              {decided && <span className="ml-1 text-sm font-bold text-amber-300">({awayExtra})</span>}
             </span>
             {decided && (
-              <span className="text-[9px] font-semibold uppercase tracking-wide text-slate-500">
+              <span className="text-[10px] font-bold uppercase tracking-wide text-amber-300">
                 {decided === 'pen' ? 'pens' : 'AET'}
               </span>
             )}

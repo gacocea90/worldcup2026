@@ -159,7 +159,7 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
                   <span className={`font-display shrink-0 text-xl font-bold tabular-nums ${scoreColor}`}>
                     {side === 'home' ? homeMain : awayMain}
                     {decided && (
-                      <span className="ml-1 text-xs opacity-70">({side === 'home' ? homeExtra : awayExtra})</span>
+                      <span className="ml-1 text-sm font-bold text-amber-300">({side === 'home' ? homeExtra : awayExtra})</span>
                     )}
                   </span>
                 )}
@@ -170,8 +170,14 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
             <span className="rounded bg-slate-700/60 px-1.5 py-0.5 font-semibold text-slate-300">{match.round ?? `Group ${match.group}`}</span>
             {live ? (
               <LiveTick label={match.matchTime || 'LIVE'} />
+            ) : finished ? (
+              <span>
+                Full time
+                {decided && <span className="font-bold uppercase text-amber-300"> · {decided === 'pen' ? 'pens' : 'AET'}</span>}
+                {' · '}KO {localTime(kickoff)}
+              </span>
             ) : (
-              <span>{finished ? `Full time${decided ? ` · ${decided === 'pen' ? 'pens' : 'AET'}` : ''} · KO ${localTime(kickoff)}` : localTime(kickoff)}</span>
+              <span>{localTime(kickoff)}</span>
             )}
             <span className="truncate">· {match.city}</span>
             {hasDetails && <span className="ml-auto shrink-0">{expanded ? '▲' : '▼'}</span>}
@@ -187,19 +193,19 @@ function MatchCard({ match, kickoff }: { match: LiveMatch; kickoff: Date }) {
             <span className="truncate font-medium">{home.name}</span>
             <Flag team={home} className="w-7" />
           </div>
-          <div className={`shrink-0 text-center ${decided ? 'w-28' : 'w-20'}`}>
+          <div className={`shrink-0 text-center ${decided ? 'w-32' : 'w-20'}`}>
             {finished ? (
               <span className={`font-display rounded-lg px-3 py-1 text-xl font-bold tabular-nums ${live ? 'bg-red-500/15 text-red-300' : 'bg-emerald-500/15 text-emerald-400'}`}>
                 {homeMain}
-                {decided && <span className="text-xs opacity-70">&#8202;({homeExtra})</span>} – {awayMain}
-                {decided && <span className="text-xs opacity-70">&#8202;({awayExtra})</span>}
+                {decided && <span className="text-sm font-bold text-amber-300">&#8202;({homeExtra})</span>} – {awayMain}
+                {decided && <span className="text-sm font-bold text-amber-300">&#8202;({awayExtra})</span>}
               </span>
             ) : (
               <span className="text-sm font-semibold text-slate-400">{localTime(kickoff)}</span>
             )}
             {live && <span className="mt-1 flex justify-center"><LiveTick label={match.matchTime || 'LIVE'} /></span>}
             {finished && !live && decided && (
-              <span className="mt-1 block text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+              <span className="mt-1 block text-[11px] font-bold uppercase tracking-wide text-amber-300">
                 {decided === 'pen' ? 'pens' : 'AET'}
               </span>
             )}
