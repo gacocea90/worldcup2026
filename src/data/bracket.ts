@@ -53,11 +53,11 @@ export const bracket: BracketMatch[] = [
   { id: 99, round: 'QF', homeLabel: 'W91', awayLabel: 'W92', date: 'Jul 11', venue: 'Hard Rock Stadium', city: 'Miami', homeTeamId: 'NOR', awayTeamId: 'ENG', homeScore: 1, awayScore: 2, winner: 'away' },
   { id: 100, round: 'QF', homeLabel: 'W95', awayLabel: 'W96', date: 'Jul 11', venue: 'Arrowhead Stadium', city: 'Kansas City', homeTeamId: 'ARG', awayTeamId: 'SUI', homeScore: 3, awayScore: 1, winner: 'home' },
   // Semi-finals
-  { id: 101, round: 'SF', homeLabel: 'W97', awayLabel: 'W98', date: 'Jul 14', venue: 'AT&T Stadium', city: 'Dallas', homeTeamId: 'FRA', awayTeamId: 'ESP' },
-  { id: 102, round: 'SF', homeLabel: 'W99', awayLabel: 'W100', date: 'Jul 15', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', homeTeamId: 'ENG', awayTeamId: 'ARG' },
+  { id: 101, round: 'SF', homeLabel: 'W97', awayLabel: 'W98', date: 'Jul 14', venue: 'AT&T Stadium', city: 'Dallas', homeTeamId: 'FRA', awayTeamId: 'ESP', homeScore: 0, awayScore: 2, winner: 'away' },
+  { id: 102, round: 'SF', homeLabel: 'W99', awayLabel: 'W100', date: 'Jul 15', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', homeTeamId: 'ENG', awayTeamId: 'ARG', homeScore: 1, awayScore: 2, winner: 'away' },
   // Third place & Final
-  { id: 103, round: '3RD', homeLabel: 'L101', awayLabel: 'L102', date: 'Jul 18', venue: 'Hard Rock Stadium', city: 'Miami' },
-  { id: 104, round: 'F', homeLabel: 'W101', awayLabel: 'W102', date: 'Jul 19', venue: 'MetLife Stadium', city: 'New York / NJ' },
+  { id: 103, round: '3RD', homeLabel: 'L101', awayLabel: 'L102', date: 'Jul 18', venue: 'Hard Rock Stadium', city: 'Miami', homeTeamId: 'FRA', awayTeamId: 'ENG' },
+  { id: 104, round: 'F', homeLabel: 'W101', awayLabel: 'W102', date: 'Jul 19', venue: 'MetLife Stadium', city: 'New York / NJ', homeTeamId: 'ESP', awayTeamId: 'ARG' },
 ];
 
 export const bracketById = (id: number): BracketMatch => bracket.find((m) => m.id === id)!;

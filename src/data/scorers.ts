@@ -56,7 +56,7 @@ export interface Assister {
 export const assists: Assister[] = [
   // Goalscorers with assists (shown in the Top Scorers table)
   { player: 'Kylian Mbappé', teamId: 'FRA', assists: 3 },
-  { player: 'Lionel Messi', teamId: 'ARG', assists: 2 },
+  { player: 'Lionel Messi', teamId: 'ARG', assists: 4 },
   { player: 'Ousmane Dembélé', teamId: 'FRA', assists: 2 },
   { player: 'Harry Kane', teamId: 'ENG', assists: 1 },
   { player: 'Jude Bellingham', teamId: 'ENG', assists: 1 },
@@ -77,6 +77,7 @@ export const assists: Assister[] = [
   { player: 'Mohamed Salah', teamId: 'EGY', assists: 2 },
   { player: 'Iliman Ndiaye', teamId: 'SEN', assists: 2 },
   { player: 'Breel Embolo', teamId: 'SUI', assists: 2 },
+  { player: 'Lautaro Martínez', teamId: 'ARG', assists: 1 },
   // Pure assist providers (no goals yet — not shown, kept for completeness)
   { player: 'Michael Olise', teamId: 'FRA', assists: 5 },
   { player: 'Bruno Guimarães', teamId: 'BRA', assists: 4 },
@@ -93,4 +94,5 @@ export const assists: Assister[] = [
   { player: 'Patrick Berg', teamId: 'NOR', assists: 2 },
   { player: 'Houssem Aouar', teamId: 'ALG', assists: 2 },
   { player: 'Denzel Dumfries', teamId: 'NED', assists: 2 },
+  { player: 'Dani Olmo', teamId: 'ESP', assists: 2 },
 ];

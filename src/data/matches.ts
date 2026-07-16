@@ -1646,8 +1646,26 @@ export const matches: Match[] = [
 
   // ── Semi-finals — July 14 – 15, 2026 ──
   // FIFA match numbers 101–102. Venue-local kickoff times (from the FIFA feed).
-  { id: 101, date: '2026-07-14', time: '14:00 CDT', group: '', round: 'Semi-final', home: 'FRA', away: 'ESP', venue: 'AT&T Stadium', city: 'Dallas', status: 'upcoming' },
-  { id: 102, date: '2026-07-15', time: '15:00 ET', group: '', round: 'Semi-final', home: 'ENG', away: 'ARG', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', status: 'upcoming' },
+  {
+    id: 101, date: '2026-07-14', time: '14:00 CDT', group: '', round: 'Semi-final', home: 'FRA', away: 'ESP', venue: 'AT&T Stadium', city: 'Dallas', status: 'finished', homeScore: 0, awayScore: 2,
+    events: [
+      { minute: "22'", type: 'goal', side: 'away', player: 'Mikel Oyarzabal' },
+      { minute: "58'", type: 'goal', side: 'away', player: 'Pedro Porro' },
+    ],
+  },
+  {
+    id: 102, date: '2026-07-15', time: '15:00 ET', group: '', round: 'Semi-final', home: 'ENG', away: 'ARG', venue: 'Mercedes-Benz Stadium', city: 'Atlanta', status: 'finished', homeScore: 1, awayScore: 2,
+    events: [
+      { minute: "55'", type: 'goal', side: 'home', player: 'Anthony Gordon' },
+      { minute: "85'", type: 'goal', side: 'away', player: 'Enzo Fernández' },
+      { minute: "90+2'", type: 'goal', side: 'away', player: 'Lautaro Martínez' },
+    ],
+  },
+
+  // ── Third-place play-off & Final — July 18 – 19, 2026 ──
+  // FIFA match numbers 103–104. Venue-local kickoff times (from the FIFA feed).
+  { id: 103, date: '2026-07-18', time: '17:00 ET', group: '', round: 'Third place', home: 'FRA', away: 'ENG', venue: 'Hard Rock Stadium', city: 'Miami', status: 'upcoming' },
+  { id: 104, date: '2026-07-19', time: '15:00 ET', group: '', round: 'Final', home: 'ESP', away: 'ARG', venue: 'MetLife Stadium', city: 'New York / New Jersey', status: 'upcoming' },
 ];
 
 export const knockoutRounds = [
