@@ -1664,8 +1664,27 @@ export const matches: Match[] = [
 
   // ── Third-place play-off & Final — July 18 – 19, 2026 ──
   // FIFA match numbers 103–104. Venue-local kickoff times (from the FIFA feed).
-  { id: 103, date: '2026-07-18', time: '17:00 ET', group: '', round: 'Third place', home: 'FRA', away: 'ENG', venue: 'Hard Rock Stadium', city: 'Miami', status: 'upcoming' },
-  { id: 104, date: '2026-07-19', time: '15:00 ET', group: '', round: 'Final', home: 'ESP', away: 'ARG', venue: 'MetLife Stadium', city: 'New York / New Jersey', status: 'upcoming' },
+  {
+    id: 103, date: '2026-07-18', time: '17:00 ET', group: '', round: 'Third place', home: 'FRA', away: 'ENG', venue: 'Hard Rock Stadium', city: 'Miami', status: 'finished', homeScore: 4, awayScore: 6,
+    events: [
+      { minute: "3'", type: 'goal', side: 'away', player: 'Declan Rice' },
+      { minute: "18'", type: 'goal', side: 'away', player: 'Ezri Konsa' },
+      { minute: "37'", type: 'goal', side: 'away', player: 'Bukayo Saka' },
+      { minute: "45+1'", type: 'goal', side: 'away', player: 'Bukayo Saka' },
+      { minute: "48'", type: 'goal', side: 'home', player: 'Kylian Mbappé' },
+      { minute: "54'", type: 'goal', side: 'home', player: 'Bradley Barcola' },
+      { minute: "66'", type: 'goal', side: 'home', player: 'Kylian Mbappé' },
+      { minute: "87'", type: 'goal', side: 'away', player: 'Bukayo Saka' },
+      { minute: "90+6'", type: 'goal', side: 'home', player: 'Ousmane Dembélé' },
+      { minute: "90+8'", type: 'goal', side: 'away', player: 'Jude Bellingham' },
+    ],
+  },
+  {
+    id: 104, date: '2026-07-19', time: '15:00 ET', group: '', round: 'Final', home: 'ESP', away: 'ARG', venue: 'MetLife Stadium', city: 'New York / New Jersey', status: 'finished', homeScore: 1, awayScore: 0, aet: true, homeScore90: 0, awayScore90: 0,
+    events: [
+      { minute: "106'", type: 'goal', side: 'home', player: 'Ferran Torres' },
+    ],
+  },
 ];
 
 export const knockoutRounds = [

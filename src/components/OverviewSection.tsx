@@ -137,6 +137,13 @@ export default function OverviewSection() {
 
         <Panel title="Coming up" accent="text-sky-400">
           <div className="space-y-2">
+            {upcoming.length === 0 && (
+              <div className="rounded-lg border border-amber-400/40 bg-amber-500/5 px-3 py-4 text-center">
+                <div className="text-2xl">🏆</div>
+                <p className="mt-1 text-sm font-semibold text-amber-300">Tournament complete</p>
+                <p className="text-xs text-slate-400">Spain are the World Champions.</p>
+              </div>
+            )}
             {upcoming.map((r, i) => {
               const key = localDateKey(r.kickoff);
               const newDay = i === 0 || key !== localDateKey(upcoming[i - 1].kickoff);

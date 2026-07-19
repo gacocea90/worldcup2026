@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import BracketSection from './components/BracketSection';
+import ChampionSection from './components/ChampionSection';
 import HeaderBanner from './components/HeaderBanner';
 import LiveNow from './components/LiveNow';
 import MatchesSection from './components/MatchesSection';
@@ -8,7 +9,7 @@ import ScorersSection from './components/ScorersSection';
 import TeamsSection from './components/TeamsSection';
 import { LiveDataProvider } from './context/LiveData';
 
-type Tab = 'overview' | 'matches' | 'teams' | 'scorers' | 'bracket';
+type Tab = 'overview' | 'matches' | 'teams' | 'scorers' | 'bracket' | 'champion';
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('overview');
@@ -31,6 +32,7 @@ export default function App() {
               ['teams', 'Groups'],
               ['scorers', 'Top Scorers'],
               ['bracket', 'Bracket'],
+              ['champion', '🏆 Champions'],
             ] as [Tab, string][]
           ).map(([id, label]) => (
             <button
@@ -55,6 +57,7 @@ export default function App() {
         {tab === 'teams' && <TeamsSection />}
         {tab === 'scorers' && <ScorersSection />}
         {tab === 'bracket' && <BracketSection />}
+        {tab === 'champion' && <ChampionSection />}
       </main>
 
       <footer className="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
